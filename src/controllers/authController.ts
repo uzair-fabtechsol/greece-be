@@ -23,6 +23,7 @@ import {
   REFRESH_TOKEN_COOKIE_MAX_AGE_MS,
 } from "@src/constants/authConstants";
 
+// FUNCTION
 const signup = catchAsync(
   async (req: Request, res: Response): Promise<void> => {
     const body = req.body as SignupBody;
@@ -37,6 +38,7 @@ const signup = catchAsync(
   },
 );
 
+// FUNCTION
 const verifyOtp = catchAsync(
   async (req: Request, res: Response): Promise<void> => {
     const body = req.body as VerifyOtpBody;
@@ -51,6 +53,7 @@ const verifyOtp = catchAsync(
   },
 );
 
+// FUNCTION
 const resendOtp = catchAsync(
   async (req: Request, res: Response): Promise<void> => {
     const body = req.body as ResendOtpBody;
@@ -65,6 +68,7 @@ const resendOtp = catchAsync(
   },
 );
 
+// FUNCTION
 const signin = catchAsync(
   async (req: Request, res: Response): Promise<void> => {
     const body = req.body as SigninBody;
@@ -91,6 +95,7 @@ const signin = catchAsync(
   },
 );
 
+// FUNCTION
 const rotateToken = catchAsync(
   async (req: Request, res: Response): Promise<void> => {
     const refreshToken = req.cookies?.[REFRESH_TOKEN_COOKIE_NAME] as
@@ -122,6 +127,7 @@ const rotateToken = catchAsync(
   },
 );
 
+// FUNCTION
 const getMe = catchAsync(
   async (req: Request, res: Response): Promise<void> => {
     const userId = req.user!._id;

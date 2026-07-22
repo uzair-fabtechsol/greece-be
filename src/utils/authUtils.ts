@@ -9,12 +9,14 @@ interface TokenPayload {
   role: string;
 }
 
+// FUNCTION
 const generateOtp = (): string => {
   const min = 10 ** (OTP_LENGTH - 1);
   const max = 10 ** OTP_LENGTH - 1;
   return String(Math.floor(min + Math.random() * (max - min + 1)));
 };
 
+// FUNCTION
 const buildOtpEmailHtml = (otp: string): string => {
   const digits = otp.split("");
 
@@ -69,6 +71,7 @@ const buildOtpEmailHtml = (otp: string): string => {
   </div>`;
 };
 
+// FUNCTION
 const sendOtpEmail = async (email: string, otp: string): Promise<void> => {
   await transporter.sendMail({
     from: env.EMAIL_FROM,
@@ -78,26 +81,31 @@ const sendOtpEmail = async (email: string, otp: string): Promise<void> => {
   });
 };
 
+// FUNCTION
 const generateAccessToken = (payload: TokenPayload): string => {
   return jwt.sign(payload, env.JWT_ACCESS_SECRET, {
     expiresIn: env.JWT_ACCESS_EXPIRES_IN,
   } as jwt.SignOptions);
 };
 
+// FUNCTION
 const generateRefreshToken = (payload: TokenPayload): string => {
   return jwt.sign(payload, env.JWT_REFRESH_SECRET, {
     expiresIn: env.JWT_REFRESH_EXPIRES_IN,
   } as jwt.SignOptions);
 };
 
+// FUNCTION
 const verifyAccessToken = (token: string): TokenPayload => {
   return jwt.verify(token, env.JWT_ACCESS_SECRET) as TokenPayload;
 };
 
+// FUNCTION
 const verifyRefreshToken = (token: string): TokenPayload => {
   return jwt.verify(token, env.JWT_REFRESH_SECRET) as TokenPayload;
 };
 
+// FUNCTION
 const getAuthCookieOptions = (maxAge: number): CookieOptions => {
   return {
     httpOnly: true,

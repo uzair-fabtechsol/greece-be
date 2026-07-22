@@ -3,15 +3,18 @@ import mongoose from "mongoose";
 import AppError from "@src/utils/appError";
 import sendResponse from "@src/utils/sendResponse";
 
+// FUNCTION
 const handleCastError = (err: mongoose.Error.CastError): AppError => {
   return new AppError(400, `Invalid ${err.path}: ${err.value}`);
 };
 
+// FUNCTION
 const handleDuplicateKeyError = (err: { keyValue?: Record<string, unknown> }): AppError => {
   const field = err.keyValue ? Object.keys(err.keyValue)[0] : "field";
   return new AppError(400, `Duplicate value for field: ${field}`);
 };
 
+// FUNCTION
 const handleMongooseValidationError = (
   err: mongoose.Error.ValidationError,
 ): AppError => {
@@ -22,6 +25,7 @@ const handleMongooseValidationError = (
   return new AppError(400, "Validation failed", { errors });
 };
 
+// FUNCTION
 const globalErrorHandler = (
   err: Error & { code?: number },
   _req: Request,

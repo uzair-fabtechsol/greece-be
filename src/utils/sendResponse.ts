@@ -15,6 +15,7 @@ interface ApiResponse {
   data: unknown;
 }
 
+// FUNCTION
 const sendResponse = (
   res: Response,
   statusCode: number,

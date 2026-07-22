@@ -5,6 +5,7 @@ mongoose.plugin((schema) => {
   schema.set("versionKey", false);
 });
 
+// FUNCTION
 export const connectDB = async () => {
   try {
     const conn = await mongoose.connect(env.MONGO_DB_CONNECTION_STRING, {

@@ -4,6 +4,7 @@ import AppError from "@src/utils/appError";
 
 type ValidationSource = "body" | "query" | "params";
 
+// FUNCTION
 const validation = (
   schema: ZodSchema,
   source: ValidationSource,

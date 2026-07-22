@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction, RequestHandler } from "express";
 
+// FUNCTION
 const catchAsync = (
   fn: (req: Request, res: Response, next: NextFunction) => Promise<void>,
 ): RequestHandler => {

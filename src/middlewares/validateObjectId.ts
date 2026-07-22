@@ -2,6 +2,7 @@ import type { RequestHandler } from "express";
 import { isValidObjectId } from "mongoose";
 import AppError from "@src/utils/appError";
 
+// FUNCTION
 const validateObjectId = (paramName = "id"): RequestHandler => {
   return (req, _res, next) => {
     const value = req.params[paramName];

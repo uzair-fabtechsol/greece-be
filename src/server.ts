@@ -2,6 +2,7 @@ import { env } from "@src/config/env";
 import { connectDB } from "@src/config/db";
 import app from "@src/app";
 
+// FUNCTION
 const startServer = async (): Promise<void> => {
   await connectDB();
 
