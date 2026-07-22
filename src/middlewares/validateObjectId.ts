@@ -2,7 +2,7 @@ import type { RequestHandler } from "express";
 import { isValidObjectId } from "mongoose";
 import AppError from "@src/utils/appError";
 
-const validateObjectIdMiddleware = (paramName = "id"): RequestHandler => {
+const validateObjectId = (paramName = "id"): RequestHandler => {
   return (req, _res, next) => {
     const value = req.params[paramName];
 
@@ -15,4 +15,4 @@ const validateObjectIdMiddleware = (paramName = "id"): RequestHandler => {
   };
 };
 
-export default validateObjectIdMiddleware;
+export default validateObjectId;

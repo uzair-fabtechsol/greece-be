@@ -1,4 +1,5 @@
 import express, { Request, Response, NextFunction } from "express";
+import cookieParser from "cookie-parser";
 import morgan from "morgan";
 import rateLimit from "express-rate-limit";
 import helmet from "helmet";
@@ -8,6 +9,7 @@ import hpp from "hpp";
 import AppError from "@src/utils/appError";
 import globalErrorHandler from "@src/controllers/errorController";
 import sendResponse from "@src/utils/sendResponse";
+import authRouter from "@src/routes/authRoutes";
 
 // ─── Process-level Safety Nets ────────────────────────────────────────────────
 
@@ -31,6 +33,9 @@ app.use(morgan("dev"));
 
 // Body parser, reading data from body into req.body
 app.use(express.json({ limit: "10kb" }));
+
+// Cookie parser, reading cookies into req.cookies
+app.use(cookieParser());
 
 // ─── Security Middleware ──────────────────────────────────────────────────────
 
@@ -104,6 +109,8 @@ app.get("/health", (_req: Request, res: Response) => {
     data: null,
   });
 });
+
+app.use("/api/v1/auth", authRouter);
 
 // ─── Unhandled Routes ─────────────────────────────────────────────────────────
 

@@ -5,6 +5,10 @@ declare global {
     interface Request {
       validatedQuery?: unknown;
       validatedParams?: unknown;
+      user?: {
+        _id: string;
+        role: string;
+      };
     }
   }
 }

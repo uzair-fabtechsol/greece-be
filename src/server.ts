@@ -1,6 +1,6 @@
-import app from "@src/app";
 import { env } from "@src/config/env";
 import { connectDB } from "@src/config/db";
+import app from "@src/app";
 
 const startServer = async (): Promise<void> => {
   await connectDB();
