@@ -8,7 +8,12 @@ const protect = (req: Request, _res: Response, next: NextFunction): void => {
   // 1 : Read the access token from the cookie
   const token = req.cookies?.[ACCESS_TOKEN_COOKIE_NAME] as string | undefined;
   if (!token) {
-    next(new AppError(401, "You are not logged in. Please log in to access this resource"));
+    next(
+      new AppError(
+        401,
+        "You are not logged in. Please log in to access this resource",
+      ),
+    );
     return;
   }
 

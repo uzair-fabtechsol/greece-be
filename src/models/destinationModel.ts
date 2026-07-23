@@ -25,6 +25,14 @@ const destinationSchema = new Schema(
       minlength: 2,
       maxlength: 100,
     },
+    slug: {
+      type: String,
+      required: true,
+      unique: true,
+      trim: true,
+      lowercase: true,
+      index: true,
+    },
     type: {
       type: String,
       enum: Object.values(DestinationType),

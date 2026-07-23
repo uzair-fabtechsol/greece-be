@@ -10,10 +10,10 @@
     "dev": "eslint src && ts-node-dev --files -r tsconfig-paths/register src/server.ts",
     "lint": "eslint src",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "migrate:create": "node -r ts-node/register/transpile-only ./node_modules/migrate-mongo/bin/migrate-mongo.js create -f src/config/migrateMongoConfig.ts",
-    "migrate:up": "node -r ts-node/register/transpile-only ./node_modules/migrate-mongo/bin/migrate-mongo.js up -f src/config/migrateMongoConfig.ts",
-    "migrate:down": "node -r ts-node/register/transpile-only ./node_modules/migrate-mongo/bin/migrate-mongo.js down -f src/config/migrateMongoConfig.ts",
-    "migrate:status": "node -r ts-node/register/transpile-only ./node_modules/migrate-mongo/bin/migrate-mongo.js status -f src/config/migrateMongoConfig.ts"
+    "migrate:create": "node -r ts-node/register/transpile-only ./node_modules/migrate-mongo/bin/migrate-mongo.js create -f src/config/migrateMongo.ts",
+    "migrate:up": "node -r ts-node/register/transpile-only ./node_modules/migrate-mongo/bin/migrate-mongo.js up -f src/config/migrateMongo.ts",
+    "migrate:down": "node -r ts-node/register/transpile-only ./node_modules/migrate-mongo/bin/migrate-mongo.js down -f src/config/migrateMongo.ts",
+    "migrate:status": "node -r ts-node/register/transpile-only ./node_modules/migrate-mongo/bin/migrate-mongo.js status -f src/config/migrateMongo.ts"
   },
   "keywords": [],
   "author": "",

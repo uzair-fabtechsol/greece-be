@@ -8,6 +8,7 @@ import type { GetPresignedUrlBody } from "@src/types/s3Types";
 
 // FUNCTION
 const extractS3KeyFromUrl = (url: string): string => {
+  // 1 : Decode the S3 object key from the public URL's path
   return decodeURIComponent(new URL(url).pathname.slice(1));
 };
 
@@ -15,10 +16,13 @@ const extractS3KeyFromUrl = (url: string): string => {
 const getPresignedUrlService = async (
   body: GetPresignedUrlBody,
 ): Promise<{ uploadUrl: string; publicUrl: string }> => {
+  // 1 : Extract the upload details from the request body
   const { folder, fileName, fileType } = body;
 
+  // 2 : Build a unique S3 key for the object
   const key = `${folder}/${randomUUID()}-${fileName}`;
 
+  // 3 : Prepare the PutObject command for a presigned upload
   const command = new PutObjectCommand({
     Bucket: env.AWS_S3_BUCKET_NAME,
     Key: key,
@@ -26,21 +30,27 @@ const getPresignedUrlService = async (
     ACL: "public-read",
   });
 
+  // 4 : Generate the presigned upload URL
   const uploadUrl = await getSignedUrl(s3Client, command, {
     expiresIn: PRESIGNED_URL_EXPIRY_SECONDS,
   });
 
+  // 5 : Build the public URL the object will be accessible at
   const publicUrl = `https://${env.AWS_S3_BUCKET_NAME}.s3.${env.AWS_REGION}.amazonaws.com/${key}`;
 
+  // 6 : Send response
   return { uploadUrl, publicUrl };
 };
 
 // FUNCTION
 const deleteImagesFromS3 = async (urls: string[]): Promise<void> => {
+  // 1 : Skip the call entirely if there is nothing to delete
   if (urls.length === 0) return;
 
+  // 2 : Convert each public URL into its S3 object key
   const keys = urls.map(extractS3KeyFromUrl);
 
+  // 3 : Batch delete all objects from the bucket
   await s3Client.send(
     new DeleteObjectsCommand({
       Bucket: env.AWS_S3_BUCKET_NAME,
