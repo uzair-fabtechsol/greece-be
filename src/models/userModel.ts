@@ -1,5 +1,10 @@
 import { model, models, Schema, type InferSchemaType } from "mongoose";
 
+enum Role {
+  Admin = "admin",
+  Traveller = "traveller",
+}
+
 const userSchema = new Schema(
   {
     fullName: {
@@ -25,8 +30,8 @@ const userSchema = new Schema(
     },
     role: {
       type: String,
-      enum: ["admin", "traveller"],
-      default: "traveller",
+      enum: Object.values(Role),
+      default: Role.Traveller,
     },
     otp: {
       type: String,
@@ -53,4 +58,5 @@ type UserType = InferSchemaType<typeof userSchema>;
 const UserModel = models.User || model<UserType>("User", userSchema);
 
 export default UserModel;
+export { Role };
 export type { UserType };
