@@ -4,6 +4,7 @@ import {
   getDestinations,
   getDestinationById,
   updateDestination,
+  deleteDestination,
 } from "@src/controllers/destinationController";
 import validation from "@src/middlewares/validation";
 import validateObjectId from "@src/middlewares/validateObjectId";
@@ -38,6 +39,13 @@ destinationRouter.patch(
   validateObjectId(),
   validation(updateDestinationSchema, "body"),
   updateDestination,
+);
+destinationRouter.delete(
+  "/:id",
+  protect,
+  restrictTo(Role.Admin),
+  validateObjectId(),
+  deleteDestination,
 );
 
 export default destinationRouter;

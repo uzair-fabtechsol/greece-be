@@ -6,6 +6,7 @@ import {
   getDestinationsService,
   getDestinationByIdService,
   updateDestinationService,
+  deleteDestinationService,
 } from "@src/services/destinationServices";
 import type {
   CreateDestinationBody,
@@ -74,9 +75,25 @@ const updateDestination = catchAsync(
   },
 );
 
+// FUNCTION
+const deleteDestination = catchAsync(
+  async (req: Request, res: Response): Promise<void> => {
+    const id = req.params.id as string;
+
+    await deleteDestinationService(id);
+
+    sendResponse(res, 200, {
+      status: "success",
+      message: "Destination deleted successfully",
+      data: null,
+    });
+  },
+);
+
 export {
   createDestination,
   getDestinations,
   getDestinationById,
   updateDestination,
+  deleteDestination,
 };

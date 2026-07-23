@@ -12,6 +12,7 @@ import sendResponse from "@src/utils/sendResponse";
 import authRouter from "@src/routes/authRoutes";
 import regionRouter from "@src/routes/regionRoutes";
 import destinationRouter from "@src/routes/destinationRoutes";
+import placeRouter from "@src/routes/placeRoutes";
 import s3Router from "@src/routes/s3Routes";
 
 // ─── Process-level Safety Nets ────────────────────────────────────────────────
@@ -116,6 +117,7 @@ app.get("/health", (_req: Request, res: Response) => {
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/regions", regionRouter);
 app.use("/api/v1/destinations", destinationRouter);
+app.use("/api/v1/places", placeRouter);
 app.use("/api/v1/s3", s3Router);
 
 // ─── Unhandled Routes ─────────────────────────────────────────────────────────

@@ -1,6 +1,7 @@
 import { Types, type PipelineStage } from "mongoose";
 import DestinationModel from "@src/models/destinationModel";
 import RegionModel from "@src/models/regionModel";
+import PlaceModel from "@src/models/placeModel";
 import { deleteImagesFromS3 } from "@src/services/s3Services";
 import AppError from "@src/utils/appError";
 import { generateUniqueSlug } from "@src/utils/slug";
@@ -168,9 +169,39 @@ const updateDestinationService = async (
   return { destination };
 };
 
+// FUNCTION
+const deleteDestinationService = async (id: string) => {
+  // 1 : Find the destination to delete
+  const destination = await DestinationModel.findById(id);
+  if (!destination) {
+    throw new AppError(404, "Destination not found");
+  }
+
+  // 2 : Prevent deletion if any place still references this destination
+  const hasPlaces = await PlaceModel.exists({ destination: id });
+  if (hasPlaces) {
+    throw new AppError(
+      400,
+      "Cannot delete a destination that has places. Delete or reassign its places first.",
+    );
+  }
+
+  // 3 : Delete the destination
+  await destination.deleteOne();
+
+  // 4 : Clean up its photo gallery images from S3
+  if (destination.photoGallery.length > 0) {
+    await deleteImagesFromS3(destination.photoGallery);
+  }
+
+  // 5 : Send response
+  return null;
+};
+
 export {
   createDestinationService,
   getDestinationsService,
   getDestinationByIdService,
   updateDestinationService,
+  deleteDestinationService,
 };
