@@ -1,4 +1,5 @@
 import { model, models, Schema, type InferSchemaType } from "mongoose";
+import { Season, Status } from "@src/constants/enumConstants";
 
 enum RegionType {
   Island = "island",
@@ -7,19 +8,6 @@ enum RegionType {
   Coastal = "coastal",
   Peninsula = "peninsula",
   Urban = "urban",
-}
-
-enum Season {
-  Spring = "spring",
-  Summer = "summer",
-  Autumn = "autumn",
-  Winter = "winter",
-}
-
-enum RegionStatus {
-  Draft = "draft",
-  Published = "published",
-  Archived = "archived",
 }
 
 const regionSchema = new Schema(
@@ -55,8 +43,8 @@ const regionSchema = new Schema(
     },
     status: {
       type: String,
-      enum: Object.values(RegionStatus),
-      default: RegionStatus.Draft,
+      enum: Object.values(Status),
+      default: Status.Draft,
     },
     about: {
       type: String,
