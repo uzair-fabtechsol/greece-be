@@ -19,6 +19,14 @@ const regionSchema = new Schema(
       minlength: 2,
       maxlength: 100,
     },
+    slug: {
+      type: String,
+      required: true,
+      unique: true,
+      trim: true,
+      lowercase: true,
+      index: true,
+    },
     tagLine: {
       type: String,
       required: true,

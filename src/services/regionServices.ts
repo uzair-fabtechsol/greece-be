@@ -2,6 +2,7 @@ import type { PipelineStage } from "mongoose";
 import RegionModel from "@src/models/regionModel";
 import { deleteImagesFromS3 } from "@src/services/s3Services";
 import AppError from "@src/utils/appError";
+import { generateUniqueSlug } from "@src/utils/slug";
 import type {
   CreateRegionBody,
   UpdateRegionBody,
@@ -11,7 +12,9 @@ import type { Pagination } from "@src/utils/sendResponse";
 
 // FUNCTION
 const createRegionService = async (body: CreateRegionBody) => {
-  const region = await RegionModel.create(body);
+  const slug = await generateUniqueSlug(RegionModel, body.name);
+
+  const region = await RegionModel.create({ ...body, slug });
 
   return { region };
 };
@@ -89,6 +92,14 @@ const updateRegionService = async (id: string, body: UpdateRegionBody) => {
   }
 
   const previousPhotoGallery = region.photoGallery;
+
+  if (body.name && body.name !== region.name) {
+    region.slug = await generateUniqueSlug(
+      RegionModel,
+      body.name,
+      region._id.toString(),
+    );
+  }
 
   Object.assign(region, body);
   await region.save();
