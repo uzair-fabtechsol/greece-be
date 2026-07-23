@@ -33,18 +33,25 @@ const regionSchema = new Schema(
     },
     tagLine: {
       type: String,
+      required: true,
       trim: true,
       maxlength: 150,
     },
     regionType: {
       type: [String],
       enum: Object.values(RegionType),
-      default: [],
+      validate: {
+        validator: (value: string[]) => value.length >= 1,
+        message: "At least 1 region type is required",
+      },
     },
     bestSeason: {
       type: [String],
       enum: Object.values(Season),
-      default: [],
+      validate: {
+        validator: (value: string[]) => value.length >= 1,
+        message: "At least 1 best season is required",
+      },
     },
     status: {
       type: String,
@@ -57,7 +64,10 @@ const regionSchema = new Schema(
     },
     photoGallery: {
       type: [String],
-      default: [],
+      validate: {
+        validator: (value: string[]) => value.length >= 5,
+        message: "At least 5 photos are required",
+      },
     },
     tipsAndTricks: {
       type: [String],
