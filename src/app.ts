@@ -14,6 +14,7 @@ import regionRouter from "@src/routes/regionRoutes";
 import destinationRouter from "@src/routes/destinationRoutes";
 import placeRouter from "@src/routes/placeRoutes";
 import activityRouter from "@src/routes/activityRoutes";
+import foodRouter from "@src/routes/foodRoutes";
 import s3Router from "@src/routes/s3Routes";
 
 // ─── Process-level Safety Nets ────────────────────────────────────────────────
@@ -120,6 +121,7 @@ app.use("/api/v1/regions", regionRouter);
 app.use("/api/v1/destinations", destinationRouter);
 app.use("/api/v1/places", placeRouter);
 app.use("/api/v1/activities", activityRouter);
+app.use("/api/v1/foods", foodRouter);
 app.use("/api/v1/s3", s3Router);
 
 // ─── Unhandled Routes ─────────────────────────────────────────────────────────
