@@ -40,9 +40,14 @@ const createDestinationSchema = z.object({
   quickFacts: quickFactsSchema,
   about: z.string().trim().optional(),
   photoGallery: z.array(z.url()).min(MIN_DESTINATION_IMAGES),
+  isFeatured: z.boolean().optional(),
 });
 
 const updateDestinationSchema = createDestinationSchema.partial();
+
+const updateFeaturedStatusSchema = z.object({
+  isFeatured: z.boolean(),
+});
 
 const getDestinationsQuerySchema = z.object({
   search: z.string().trim().optional(),
@@ -64,5 +69,6 @@ const getDestinationsQuerySchema = z.object({
 export {
   createDestinationSchema,
   updateDestinationSchema,
+  updateFeaturedStatusSchema,
   getDestinationsQuerySchema,
 };

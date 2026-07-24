@@ -15,12 +15,13 @@ import type {
   ResendOtpBody,
   SigninBody,
 } from "@src/types/authTypes";
-import { getAuthCookieOptions } from "@src/utils/authUtils";
+import {
+  getAccessTokenCookieOptions,
+  getRefreshTokenCookieOptions,
+} from "@src/utils/authUtils";
 import {
   ACCESS_TOKEN_COOKIE_NAME,
   REFRESH_TOKEN_COOKIE_NAME,
-  ACCESS_TOKEN_COOKIE_MAX_AGE_MS,
-  REFRESH_TOKEN_COOKIE_MAX_AGE_MS,
 } from "@src/constants/authConstants";
 
 // FUNCTION
@@ -79,12 +80,12 @@ const signin = catchAsync(
       .cookie(
         ACCESS_TOKEN_COOKIE_NAME,
         accessToken,
-        getAuthCookieOptions(ACCESS_TOKEN_COOKIE_MAX_AGE_MS),
+        getAccessTokenCookieOptions(),
       )
       .cookie(
         REFRESH_TOKEN_COOKIE_NAME,
         refreshToken,
-        getAuthCookieOptions(REFRESH_TOKEN_COOKIE_MAX_AGE_MS),
+        getRefreshTokenCookieOptions(),
       );
 
     sendResponse(res, 200, {
@@ -111,12 +112,12 @@ const rotateToken = catchAsync(
       .cookie(
         ACCESS_TOKEN_COOKIE_NAME,
         accessToken,
-        getAuthCookieOptions(ACCESS_TOKEN_COOKIE_MAX_AGE_MS),
+        getAccessTokenCookieOptions(),
       )
       .cookie(
         REFRESH_TOKEN_COOKIE_NAME,
         newRefreshToken,
-        getAuthCookieOptions(REFRESH_TOKEN_COOKIE_MAX_AGE_MS),
+        getRefreshTokenCookieOptions(),
       );
 
     sendResponse(res, 200, {

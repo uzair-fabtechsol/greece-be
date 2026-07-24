@@ -7,6 +7,9 @@ import { ACCESS_TOKEN_COOKIE_NAME } from "@src/constants/authConstants";
 const protect = (req: Request, _res: Response, next: NextFunction): void => {
   // 1 : Read the access token from the cookie
   const token = req.cookies?.[ACCESS_TOKEN_COOKIE_NAME] as string | undefined;
+
+  console.log("token ---------------------------------- \n", token);
+
   if (!token) {
     next(
       new AppError(

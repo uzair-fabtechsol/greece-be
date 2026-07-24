@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+import ms from "ms";
 import type { CookieOptions } from "express";
 import { OTP_LENGTH, OTP_EXPIRY_MINUTES } from "@src/constants/authConstants";
 import transporter from "@src/config/mailer";
@@ -115,6 +116,18 @@ const getAuthCookieOptions = (maxAge: number): CookieOptions => {
   };
 };
 
+// FUNCTION
+const getAccessTokenCookieOptions = (): CookieOptions => {
+  return getAuthCookieOptions(ms(env.JWT_ACCESS_EXPIRES_IN as ms.StringValue));
+};
+
+// FUNCTION
+const getRefreshTokenCookieOptions = (): CookieOptions => {
+  return getAuthCookieOptions(
+    ms(env.JWT_REFRESH_EXPIRES_IN as ms.StringValue),
+  );
+};
+
 export {
   generateOtp,
   sendOtpEmail,
@@ -123,5 +136,7 @@ export {
   verifyAccessToken,
   verifyRefreshToken,
   getAuthCookieOptions,
+  getAccessTokenCookieOptions,
+  getRefreshTokenCookieOptions,
 };
 export type { TokenPayload };

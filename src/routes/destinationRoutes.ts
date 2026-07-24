@@ -5,6 +5,7 @@ import {
   getDestinationById,
   updateDestination,
   deleteDestination,
+  updateDestinationFeaturedStatus,
 } from "@src/controllers/destinationController";
 import validation from "@src/middlewares/validation";
 import validateObjectId from "@src/middlewares/validateObjectId";
@@ -14,6 +15,7 @@ import { Role } from "@src/models/userModel";
 import {
   createDestinationSchema,
   updateDestinationSchema,
+  updateFeaturedStatusSchema,
   getDestinationsQuerySchema,
 } from "@src/validations/destinationValidations";
 
@@ -46,6 +48,14 @@ destinationRouter.delete(
   restrictTo(Role.Admin),
   validateObjectId(),
   deleteDestination,
+);
+destinationRouter.patch(
+  "/:id/featured-status",
+  protect,
+  restrictTo(Role.Admin),
+  validateObjectId(),
+  validation(updateFeaturedStatusSchema, "body"),
+  updateDestinationFeaturedStatus,
 );
 
 export default destinationRouter;

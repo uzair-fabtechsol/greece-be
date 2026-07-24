@@ -91,6 +91,10 @@ const destinationSchema = new Schema(
         message: "At least 5 photos are required",
       },
     },
+    isFeatured: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,

@@ -15,9 +15,14 @@ interface CreateDestinationBody {
   };
   about?: string;
   photoGallery: string[];
+  isFeatured?: boolean;
 }
 
 type UpdateDestinationBody = Partial<CreateDestinationBody>;
+
+interface UpdateFeaturedStatusBody {
+  isFeatured: boolean;
+}
 
 interface GetDestinationsQuery {
   search?: string;
@@ -31,4 +36,9 @@ interface GetDestinationsQuery {
   region?: string;
 }
 
-export type { CreateDestinationBody, UpdateDestinationBody, GetDestinationsQuery };
+export type {
+  CreateDestinationBody,
+  UpdateDestinationBody,
+  UpdateFeaturedStatusBody,
+  GetDestinationsQuery,
+};
