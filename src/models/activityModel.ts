@@ -8,6 +8,11 @@ import {
   MAX_WHAT_TO_EXPECT,
   MAX_GOOD_TO_KNOW,
 } from "@src/constants/activityConstants";
+import {
+  NAME_MIN_LENGTH,
+  NAME_MAX_LENGTH,
+  TAGLINE_MAX_LENGTH,
+} from "@src/constants/commonConstants";
 
 enum ActivityType {
   Boating = "boating",
@@ -34,8 +39,8 @@ const activitySchema = new Schema(
       type: String,
       required: true,
       trim: true,
-      minlength: 2,
-      maxlength: 100,
+      minlength: NAME_MIN_LENGTH,
+      maxlength: NAME_MAX_LENGTH,
     },
     slug: {
       type: String,
@@ -49,7 +54,7 @@ const activitySchema = new Schema(
       type: String,
       required: true,
       trim: true,
-      maxlength: 150,
+      maxlength: TAGLINE_MAX_LENGTH,
     },
     type: {
       type: String,

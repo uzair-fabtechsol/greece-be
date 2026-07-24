@@ -7,6 +7,11 @@ import {
   DESTINATION_SORT_FIELDS,
   MAX_TIPS_AND_TRICKS,
 } from "@src/constants/destinationConstants";
+import {
+  NAME_MIN_LENGTH,
+  NAME_MAX_LENGTH,
+  TAGLINE_MAX_LENGTH,
+} from "@src/constants/commonConstants";
 
 const destinationTypeEnum = z.enum([
   "island",
@@ -35,7 +40,8 @@ const quickFactsSchema = z.object({
 
 const createDestinationSchema = z.object({
   region: z.string().trim().min(1),
-  name: z.string().trim().min(2).max(100),
+  name: z.string().trim().min(NAME_MIN_LENGTH).max(NAME_MAX_LENGTH),
+  tagLine: z.string().trim().min(1).max(TAGLINE_MAX_LENGTH),
   type: destinationTypeEnum,
   status: destinationStatusEnum.optional(),
   quickFacts: quickFactsSchema,

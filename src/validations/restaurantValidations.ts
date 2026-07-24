@@ -6,6 +6,10 @@ import {
   MAX_RESTAURANTS_LIMIT,
   RESTAURANT_SORT_FIELDS,
 } from "@src/constants/restaurantConstants";
+import {
+  NAME_MIN_LENGTH,
+  NAME_MAX_LENGTH,
+} from "@src/constants/commonConstants";
 
 const typeEnum = z.enum([
   "fineDining",
@@ -28,7 +32,7 @@ const restaurantStatusEnum = z.enum(["draft", "published", "archived"]);
 
 const createRestaurantSchema = z
   .object({
-    name: z.string().trim().min(2).max(100),
+    name: z.string().trim().min(NAME_MIN_LENGTH).max(NAME_MAX_LENGTH),
     type: typeEnum,
     priceRange: priceRangeEnum,
     status: restaurantStatusEnum.optional(),
@@ -51,7 +55,12 @@ const createRestaurantSchema = z
 
 const updateRestaurantSchema = z
   .object({
-    name: z.string().trim().min(2).max(100).optional(),
+    name: z
+      .string()
+      .trim()
+      .min(NAME_MIN_LENGTH)
+      .max(NAME_MAX_LENGTH)
+      .optional(),
     type: typeEnum.optional(),
     priceRange: priceRangeEnum.optional(),
     status: restaurantStatusEnum.optional(),

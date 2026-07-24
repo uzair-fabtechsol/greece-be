@@ -7,6 +7,11 @@ import {
   MAX_REGIONS_LIMIT,
   REGION_SORT_FIELDS,
 } from "@src/constants/regionConstants";
+import {
+  NAME_MIN_LENGTH,
+  NAME_MAX_LENGTH,
+  TAGLINE_MAX_LENGTH,
+} from "@src/constants/commonConstants";
 
 const typeEnum = z.enum([
   "island",
@@ -27,8 +32,8 @@ const faqSchema = z.object({
 });
 
 const createRegionSchema = z.object({
-  name: z.string().trim().min(2).max(100),
-  tagLine: z.string().trim().min(1).max(150),
+  name: z.string().trim().min(NAME_MIN_LENGTH).max(NAME_MAX_LENGTH),
+  tagLine: z.string().trim().min(1).max(TAGLINE_MAX_LENGTH),
   type: z.array(typeEnum).min(1),
   bestSeason: z.array(seasonEnum).min(1),
   status: regionStatusEnum.optional(),

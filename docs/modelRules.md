@@ -161,6 +161,23 @@ This automatically adds:
 - `createdAt`
 - `updatedAt`
 
+## When To Use a Constant vs. an Inline Value
+
+When a field has a limit (`minlength`, `maxlength`, `min`, `max`, `enum`, etc.), decide whether it belongs in a shared constants file (`src/constants/`) or can stay inline directly in the schema.
+
+Ask two questions:
+
+1. **Is the same value also enforced somewhere else** (most commonly the matching Zod validation schema for the same field, but also possibly another model)?
+   - If **yes** → it MUST be a constant, imported into every place that enforces it. Two independent hardcoded copies of the same rule will eventually drift out of sync (e.g. model allows 10 images, Zod validator still says 5).
+   - If **no**, go to question 2.
+2. **Is this a business rule someone could plausibly ask to change** (e.g. "max gallery photos", "max tags per activity", "min/max name length")?
+   - If **yes** → still make it a constant, even though it's only used once today. It keeps future changes to a one-line edit instead of a code hunt, and gives the value a self-documenting name.
+   - If **no** — it's a purely structural/technical fact tied to one single field with no reuse potential (e.g. OTP length, which is not duplicated anywhere else and isn't a "business decision") → leave it inline. Wrapping it in a constant adds indirection with no benefit.
+
+Rule of thumb: **extract when the value is duplicated across files, or when it's a tunable business rule — not just because a number appears in code.**
+
+Do not define constants that are never imported anywhere. A constant that exists in a constants file but isn't actually used in a model or validator is worse than no constant — it gives a false impression that a limit is enforced when it isn't. If a constant becomes unused, either wire it up or delete it.
+
 ## Optional and Nullable Fields
 
 If a field is optional and should be empty at first, use `default: null`.

@@ -7,6 +7,11 @@ import {
   MAX_SUSTAINABILITY_NOTES,
   MAX_TIPS_AND_TRICKS,
 } from "@src/constants/placeConstants";
+import {
+  NAME_MIN_LENGTH,
+  NAME_MAX_LENGTH,
+  TAGLINE_MAX_LENGTH,
+} from "@src/constants/commonConstants";
 
 enum PlaceType {
   Beach = "beach",
@@ -38,8 +43,8 @@ const placeSchema = new Schema(
       type: String,
       required: true,
       trim: true,
-      minlength: 2,
-      maxlength: 100,
+      minlength: NAME_MIN_LENGTH,
+      maxlength: NAME_MAX_LENGTH,
     },
     slug: {
       type: String,
@@ -53,7 +58,7 @@ const placeSchema = new Schema(
       type: String,
       required: true,
       trim: true,
-      maxlength: 150,
+      maxlength: TAGLINE_MAX_LENGTH,
     },
     type: {
       type: String,

@@ -1,4 +1,12 @@
 import { model, models, Schema, type InferSchemaType } from "mongoose";
+import {
+  OTP_LENGTH,
+  PASSWORD_MIN_LENGTH,
+} from "@src/constants/authConstants";
+import {
+  NAME_MIN_LENGTH,
+  NAME_MAX_LENGTH,
+} from "@src/constants/commonConstants";
 
 enum Role {
   Admin = "admin",
@@ -11,8 +19,8 @@ const userSchema = new Schema(
       type: String,
       required: true,
       trim: true,
-      minlength: 2,
-      maxlength: 100,
+      minlength: NAME_MIN_LENGTH,
+      maxlength: NAME_MAX_LENGTH,
     },
     email: {
       type: String,
@@ -26,7 +34,7 @@ const userSchema = new Schema(
       type: String,
       required: true,
       select: false,
-      minlength: 8,
+      minlength: PASSWORD_MIN_LENGTH,
     },
     role: {
       type: String,
@@ -36,8 +44,8 @@ const userSchema = new Schema(
     otp: {
       type: String,
       default: null,
-      minlength: 6,
-      maxlength: 6,
+      minlength: OTP_LENGTH,
+      maxlength: OTP_LENGTH,
     },
     otpExpiresAt: {
       type: Date,

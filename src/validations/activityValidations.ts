@@ -10,6 +10,11 @@ import {
   MAX_ACTIVITIES_LIMIT,
   ACTIVITY_SORT_FIELDS,
 } from "@src/constants/activityConstants";
+import {
+  NAME_MIN_LENGTH,
+  NAME_MAX_LENGTH,
+  TAGLINE_MAX_LENGTH,
+} from "@src/constants/commonConstants";
 
 const typeEnum = z.enum([
   "boating",
@@ -34,8 +39,8 @@ const activityStatusEnum = z.enum(["draft", "published", "archived"]);
 
 const createActivitySchema = z
   .object({
-    name: z.string().trim().min(2).max(100),
-    tagLine: z.string().trim().min(1).max(150),
+    name: z.string().trim().min(NAME_MIN_LENGTH).max(NAME_MAX_LENGTH),
+    tagLine: z.string().trim().min(1).max(TAGLINE_MAX_LENGTH),
     type: typeEnum,
     status: activityStatusEnum.optional(),
     about: z.string().trim().optional(),
@@ -67,8 +72,13 @@ const createActivitySchema = z
 
 const updateActivitySchema = z
   .object({
-    name: z.string().trim().min(2).max(100).optional(),
-    tagLine: z.string().trim().min(1).max(150).optional(),
+    name: z
+      .string()
+      .trim()
+      .min(NAME_MIN_LENGTH)
+      .max(NAME_MAX_LENGTH)
+      .optional(),
+    tagLine: z.string().trim().min(1).max(TAGLINE_MAX_LENGTH).optional(),
     type: typeEnum.optional(),
     status: activityStatusEnum.optional(),
     about: z.string().trim().optional(),

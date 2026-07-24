@@ -5,6 +5,11 @@ import {
   MAX_REGION_IMAGES,
   MAX_TIPS_AND_TRICKS,
 } from "@src/constants/regionConstants";
+import {
+  NAME_MIN_LENGTH,
+  NAME_MAX_LENGTH,
+  TAGLINE_MAX_LENGTH,
+} from "@src/constants/commonConstants";
 
 enum RegionType {
   Island = "island",
@@ -21,8 +26,8 @@ const regionSchema = new Schema(
       type: String,
       required: true,
       trim: true,
-      minlength: 2,
-      maxlength: 100,
+      minlength: NAME_MIN_LENGTH,
+      maxlength: NAME_MAX_LENGTH,
     },
     slug: {
       type: String,
@@ -36,7 +41,7 @@ const regionSchema = new Schema(
       type: String,
       required: true,
       trim: true,
-      maxlength: 150,
+      maxlength: TAGLINE_MAX_LENGTH,
     },
     type: {
       type: [String],

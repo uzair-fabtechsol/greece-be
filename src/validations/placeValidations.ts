@@ -9,6 +9,11 @@ import {
   MAX_PLACES_LIMIT,
   PLACE_SORT_FIELDS,
 } from "@src/constants/placeConstants";
+import {
+  NAME_MIN_LENGTH,
+  NAME_MAX_LENGTH,
+  TAGLINE_MAX_LENGTH,
+} from "@src/constants/commonConstants";
 
 const typeEnum = z.enum([
   "beach",
@@ -38,8 +43,8 @@ const heritageSchema = z.object({
 
 const createPlaceSchema = z.object({
   destination: z.string().trim().min(1),
-  name: z.string().trim().min(2).max(100),
-  tagLine: z.string().trim().min(1).max(150),
+  name: z.string().trim().min(NAME_MIN_LENGTH).max(NAME_MAX_LENGTH),
+  tagLine: z.string().trim().min(1).max(TAGLINE_MAX_LENGTH),
   type: typeEnum,
   status: placeStatusEnum.optional(),
   about: z.string().trim().optional(),

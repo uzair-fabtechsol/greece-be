@@ -4,6 +4,10 @@ import {
   MIN_RESTAURANT_IMAGES,
   MAX_RESTAURANT_IMAGES,
 } from "@src/constants/restaurantConstants";
+import {
+  NAME_MIN_LENGTH,
+  NAME_MAX_LENGTH,
+} from "@src/constants/commonConstants";
 
 enum RestaurantType {
   FineDining = "fineDining",
@@ -33,8 +37,8 @@ const restaurantSchema = new Schema(
       type: String,
       required: true,
       trim: true,
-      minlength: 2,
-      maxlength: 100,
+      minlength: NAME_MIN_LENGTH,
+      maxlength: NAME_MAX_LENGTH,
     },
     slug: {
       type: String,
