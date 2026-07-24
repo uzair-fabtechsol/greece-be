@@ -7,7 +7,7 @@ import {
 import {
   NAME_MIN_LENGTH,
   NAME_MAX_LENGTH,
-} from "@src/constants/commonConstants";
+} from "@src/constants/limitConstants";
 
 enum RestaurantType {
   FineDining = "fineDining",

@@ -14,7 +14,7 @@ import {
   NAME_MIN_LENGTH,
   NAME_MAX_LENGTH,
   TAGLINE_MAX_LENGTH,
-} from "@src/constants/commonConstants";
+} from "@src/constants/limitConstants";
 
 const typeEnum = z.enum([
   "boating",

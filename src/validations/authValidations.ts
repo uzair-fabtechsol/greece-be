@@ -3,7 +3,7 @@ import { OTP_LENGTH, PASSWORD_MIN_LENGTH } from "@src/constants/authConstants";
 import {
   NAME_MIN_LENGTH,
   NAME_MAX_LENGTH,
-} from "@src/constants/commonConstants";
+} from "@src/constants/limitConstants";
 
 const signupSchema = z.object({
   fullName: z.string().trim().min(NAME_MIN_LENGTH).max(NAME_MAX_LENGTH),
