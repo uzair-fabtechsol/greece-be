@@ -11,6 +11,8 @@ import {
 import type {
   CreateActivityBody,
   UpdateActivityBody,
+  UpdateFeaturedStatusBody,
+  UpdateIndexableStatusBody,
   GetActivitiesQuery,
 } from "@src/types/activityTypes";
 
@@ -90,10 +92,44 @@ const deleteActivity = catchAsync(
   },
 );
 
+// FUNCTION
+const updateActivityFeaturedStatus = catchAsync(
+  async (req: Request, res: Response): Promise<void> => {
+    const id = req.params.id as string;
+    const body = req.body as UpdateFeaturedStatusBody;
+
+    const data = await updateActivityService(id, body);
+
+    sendResponse(res, 200, {
+      status: "success",
+      message: "Activity featured status updated successfully",
+      data,
+    });
+  },
+);
+
+// FUNCTION
+const updateActivityIndexableStatus = catchAsync(
+  async (req: Request, res: Response): Promise<void> => {
+    const id = req.params.id as string;
+    const body = req.body as UpdateIndexableStatusBody;
+
+    const data = await updateActivityService(id, body);
+
+    sendResponse(res, 200, {
+      status: "success",
+      message: "Activity indexable status updated successfully",
+      data,
+    });
+  },
+);
+
 export {
   createActivity,
   getActivities,
   getActivityById,
   updateActivity,
   deleteActivity,
+  updateActivityFeaturedStatus,
+  updateActivityIndexableStatus,
 };

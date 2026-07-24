@@ -53,6 +53,8 @@ const createActivitySchema = z
     destination: z.string().trim().min(1).optional(),
     place: z.string().trim().min(1).optional(),
     photoGallery: z.array(z.url()).min(MIN_ACTIVITY_IMAGES),
+    isFeatured: z.boolean().optional(),
+    isIndexable: z.boolean().optional(),
   })
   .refine(
     (data) => [data.region, data.destination, data.place].filter(Boolean)
@@ -84,6 +86,8 @@ const updateActivitySchema = z
     destination: z.string().trim().min(1).optional(),
     place: z.string().trim().min(1).optional(),
     photoGallery: z.array(z.url()).min(MIN_ACTIVITY_IMAGES).optional(),
+    isFeatured: z.boolean().optional(),
+    isIndexable: z.boolean().optional(),
   })
   .refine(
     (data) => [data.region, data.destination, data.place].filter(Boolean)
@@ -93,6 +97,14 @@ const updateActivitySchema = z
       path: ["region"],
     },
   );
+
+const updateFeaturedStatusSchema = z.object({
+  isFeatured: z.boolean(),
+});
+
+const updateIndexableStatusSchema = z.object({
+  isIndexable: z.boolean(),
+});
 
 const getActivitiesQuerySchema = z.object({
   search: z.string().trim().optional(),
@@ -115,5 +127,7 @@ const getActivitiesQuerySchema = z.object({
 export {
   createActivitySchema,
   updateActivitySchema,
+  updateFeaturedStatusSchema,
+  updateIndexableStatusSchema,
   getActivitiesQuerySchema,
 };

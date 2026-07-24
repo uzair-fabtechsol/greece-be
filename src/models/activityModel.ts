@@ -111,6 +111,14 @@ const activitySchema = new Schema(
         message: "At least 5 photos are required",
       },
     },
+    isFeatured: {
+      type: Boolean,
+      default: false,
+    },
+    isIndexable: {
+      type: Boolean,
+      default: true,
+    },
   },
   {
     timestamps: true,

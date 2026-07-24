@@ -12,9 +12,19 @@ interface CreateActivityBody {
   destination?: string;
   place?: string;
   photoGallery: string[];
+  isFeatured?: boolean;
+  isIndexable?: boolean;
 }
 
 type UpdateActivityBody = Partial<CreateActivityBody>;
+
+interface UpdateFeaturedStatusBody {
+  isFeatured: boolean;
+}
+
+interface UpdateIndexableStatusBody {
+  isIndexable: boolean;
+}
 
 interface GetActivitiesQuery {
   search?: string;
@@ -29,4 +39,10 @@ interface GetActivitiesQuery {
   place?: string;
 }
 
-export type { CreateActivityBody, UpdateActivityBody, GetActivitiesQuery };
+export type {
+  CreateActivityBody,
+  UpdateActivityBody,
+  UpdateFeaturedStatusBody,
+  UpdateIndexableStatusBody,
+  GetActivitiesQuery,
+};
