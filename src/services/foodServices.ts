@@ -89,7 +89,7 @@ const getFoodsService = async (query: GetFoodsQuery) => {
     limit,
     sortBy,
     sortOrder,
-    foodType,
+    type,
     status,
     region,
     destination,
@@ -100,7 +100,7 @@ const getFoodsService = async (query: GetFoodsQuery) => {
   const match: Record<string, unknown> = {};
 
   if (status) match.status = status;
-  if (foodType) match.foodType = foodType;
+  if (type) match.type = type;
   if (region) match.region = new Types.ObjectId(region);
   if (destination) match.destination = new Types.ObjectId(destination);
   if (place) match.place = new Types.ObjectId(place);

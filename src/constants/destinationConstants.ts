@@ -1,6 +1,8 @@
 export const MIN_DESTINATION_IMAGES = 5;
 export const MAX_DESTINATION_IMAGES = 10;
 
+export const MAX_TIPS_AND_TRICKS = 10;
+
 export const DEFAULT_DESTINATIONS_PAGE = 1;
 export const DEFAULT_DESTINATIONS_LIMIT = 10;
 export const MAX_DESTINATIONS_LIMIT = 50;

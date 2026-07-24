@@ -1,6 +1,6 @@
 interface CreateRestaurantBody {
   name: string;
-  restaurantType: string;
+  type: string;
   priceRange: string;
   status?: "draft" | "published" | "archived";
   about?: string;
@@ -28,7 +28,7 @@ interface GetRestaurantsQuery {
   limit: number;
   sortBy: "name" | "createdAt" | "updatedAt";
   sortOrder: "asc" | "desc";
-  restaurantType?: string;
+  type?: string;
   priceRange?: string;
   status?: string;
   region?: string;

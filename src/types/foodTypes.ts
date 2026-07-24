@@ -1,7 +1,7 @@
 interface CreateFoodBody {
   name: string;
   tagLine: string;
-  foodType: string;
+  type: string;
   status?: "draft" | "published" | "archived";
   about?: string;
   region?: string;
@@ -28,7 +28,7 @@ interface GetFoodsQuery {
   limit: number;
   sortBy: "name" | "createdAt" | "updatedAt";
   sortOrder: "asc" | "desc";
-  foodType?: string;
+  type?: string;
   status?: string;
   region?: string;
   destination?: string;

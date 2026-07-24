@@ -1,7 +1,7 @@
 interface CreateRegionBody {
   name: string;
   tagLine: string;
-  regionType: string[];
+  type: string[];
   bestSeason: string[];
   status?: "draft" | "published" | "archived";
   about?: string;
@@ -18,7 +18,7 @@ interface GetRegionsQuery {
   limit: number;
   sortBy: "name" | "createdAt" | "updatedAt";
   sortOrder: "asc" | "desc";
-  regionType?: string;
+  type?: string;
   bestSeason?: string;
   status?: string;
 }

@@ -1,18 +1,25 @@
 import { model, models, Schema, type InferSchemaType } from "mongoose";
 import { Status } from "@src/constants/enumConstants";
+import {
+  MIN_PLACE_IMAGES,
+  MAX_PLACE_IMAGES,
+  MAX_HERITAGE_ENTRIES,
+  MAX_SUSTAINABILITY_NOTES,
+  MAX_TIPS_AND_TRICKS,
+} from "@src/constants/placeConstants";
 
 enum PlaceType {
   Beach = "beach",
   Viewpoint = "viewpoint",
   Landmark = "landmark",
   Village = "village",
-  ArchaeologicalSite = "archaeological-site",
+  ArchaeologicalSite = "archaeologicalSite",
   Museum = "museum",
   Monastery = "monastery",
   Church = "church",
   Gorge = "gorge",
   Cave = "cave",
-  NatureReserve = "nature-reserve",
+  NatureReserve = "natureReserve",
   Mountain = "mountain",
   Lake = "lake",
   Waterfall = "waterfall",
@@ -48,7 +55,7 @@ const placeSchema = new Schema(
       trim: true,
       maxlength: 150,
     },
-    placeType: {
+    type: {
       type: String,
       enum: Object.values(PlaceType),
       required: true,
@@ -79,28 +86,34 @@ const placeSchema = new Schema(
       ],
       default: [],
       validate: {
-        validator: (value: unknown[]) => value.length <= 10,
-        message: "At most 10 heritage entries are allowed",
+        validator: (value: unknown[]) => value.length <= MAX_HERITAGE_ENTRIES,
+        message: `At most ${MAX_HERITAGE_ENTRIES} heritage entries are allowed`,
       },
     },
     sustainabilityNotes: {
       type: [String],
       default: [],
       validate: {
-        validator: (value: string[]) => value.length <= 10,
-        message: "At most 10 sustainability notes are allowed",
+        validator: (value: string[]) =>
+          value.length <= MAX_SUSTAINABILITY_NOTES,
+        message: `At most ${MAX_SUSTAINABILITY_NOTES} sustainability notes are allowed`,
       },
     },
     photoGallery: {
       type: [String],
       validate: {
-        validator: (value: string[]) => value.length >= 5,
-        message: "At least 5 photos are required",
+        validator: (value: string[]) =>
+          value.length >= MIN_PLACE_IMAGES && value.length <= MAX_PLACE_IMAGES,
+        message: `At least ${MIN_PLACE_IMAGES} and at most ${MAX_PLACE_IMAGES} photos are required`,
       },
     },
     tipsAndTricks: {
       type: [String],
       default: [],
+      validate: {
+        validator: (value: string[]) => value.length <= MAX_TIPS_AND_TRICKS,
+        message: `At most ${MAX_TIPS_AND_TRICKS} tips and tricks are allowed`,
+      },
     },
   },
   {

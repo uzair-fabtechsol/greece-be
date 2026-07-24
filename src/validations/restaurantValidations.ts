@@ -7,34 +7,29 @@ import {
   RESTAURANT_SORT_FIELDS,
 } from "@src/constants/restaurantConstants";
 
-const restaurantTypeEnum = z.enum([
-  "fine-dining",
-  "casual-dining",
+const typeEnum = z.enum([
+  "fineDining",
+  "casualDining",
   "taverna",
   "cafe",
   "bakery",
-  "street-food",
+  "streetFood",
   "seafood",
   "bar",
-  "wine-bar",
-  "beach-bar",
-  "fast-food",
+  "wineBar",
+  "beachBar",
+  "fastFood",
   "bistro",
 ]);
 
-const priceRangeEnum = z.enum([
-  "budget",
-  "mid-range",
-  "fine-dining",
-  "luxury",
-]);
+const priceRangeEnum = z.enum(["budget", "midRange", "premium", "luxury"]);
 
 const restaurantStatusEnum = z.enum(["draft", "published", "archived"]);
 
 const createRestaurantSchema = z
   .object({
     name: z.string().trim().min(2).max(100),
-    restaurantType: restaurantTypeEnum,
+    type: typeEnum,
     priceRange: priceRangeEnum,
     status: restaurantStatusEnum.optional(),
     about: z.string().trim().optional(),
@@ -57,7 +52,7 @@ const createRestaurantSchema = z
 const updateRestaurantSchema = z
   .object({
     name: z.string().trim().min(2).max(100).optional(),
-    restaurantType: restaurantTypeEnum.optional(),
+    type: typeEnum.optional(),
     priceRange: priceRangeEnum.optional(),
     status: restaurantStatusEnum.optional(),
     about: z.string().trim().optional(),
@@ -96,7 +91,7 @@ const getRestaurantsQuerySchema = z.object({
     .default(DEFAULT_RESTAURANTS_LIMIT),
   sortBy: z.enum(RESTAURANT_SORT_FIELDS).default("createdAt"),
   sortOrder: z.enum(["asc", "desc"]).default("desc"),
-  restaurantType: restaurantTypeEnum.optional(),
+  type: typeEnum.optional(),
   priceRange: priceRangeEnum.optional(),
   status: restaurantStatusEnum.optional(),
   region: z.string().trim().optional(),

@@ -1,13 +1,14 @@
 import { z } from "zod";
 import {
   MIN_REGION_IMAGES,
+  MAX_TIPS_AND_TRICKS,
   DEFAULT_REGIONS_PAGE,
   DEFAULT_REGIONS_LIMIT,
   MAX_REGIONS_LIMIT,
   REGION_SORT_FIELDS,
 } from "@src/constants/regionConstants";
 
-const regionTypeEnum = z.enum([
+const typeEnum = z.enum([
   "island",
   "mainland",
   "mountainous",
@@ -28,12 +29,15 @@ const faqSchema = z.object({
 const createRegionSchema = z.object({
   name: z.string().trim().min(2).max(100),
   tagLine: z.string().trim().min(1).max(150),
-  regionType: z.array(regionTypeEnum).min(1),
+  type: z.array(typeEnum).min(1),
   bestSeason: z.array(seasonEnum).min(1),
   status: regionStatusEnum.optional(),
   about: z.string().trim().optional(),
   photoGallery: z.array(z.url()).min(MIN_REGION_IMAGES),
-  tipsAndTricks: z.array(z.string().trim()).optional(),
+  tipsAndTricks: z
+    .array(z.string().trim())
+    .max(MAX_TIPS_AND_TRICKS)
+    .optional(),
   faqs: z.array(faqSchema).optional(),
 });
 
@@ -50,7 +54,7 @@ const getRegionsQuerySchema = z.object({
     .default(DEFAULT_REGIONS_LIMIT),
   sortBy: z.enum(REGION_SORT_FIELDS).default("createdAt"),
   sortOrder: z.enum(["asc", "desc"]).default("desc"),
-  regionType: regionTypeEnum.optional(),
+  type: typeEnum.optional(),
   bestSeason: seasonEnum.optional(),
   status: regionStatusEnum.optional(),
 });

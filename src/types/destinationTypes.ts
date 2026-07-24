@@ -1,6 +1,7 @@
 interface CreateDestinationBody {
   region: string;
   name: string;
+  tagLine: string;
   type: string;
   status?: "draft" | "published" | "archived";
   quickFacts: {
@@ -15,6 +16,7 @@ interface CreateDestinationBody {
   };
   about?: string;
   photoGallery: string[];
+  tipsAndTricks?: string[];
   isFeatured?: boolean;
 }
 

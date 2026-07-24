@@ -1,5 +1,10 @@
 import { model, models, Schema, type InferSchemaType } from "mongoose";
 import { Season, Status } from "@src/constants/enumConstants";
+import {
+  MIN_REGION_IMAGES,
+  MAX_REGION_IMAGES,
+  MAX_TIPS_AND_TRICKS,
+} from "@src/constants/regionConstants";
 
 enum RegionType {
   Island = "island",
@@ -33,7 +38,7 @@ const regionSchema = new Schema(
       trim: true,
       maxlength: 150,
     },
-    regionType: {
+    type: {
       type: [String],
       enum: Object.values(RegionType),
       validate: {
@@ -61,13 +66,19 @@ const regionSchema = new Schema(
     photoGallery: {
       type: [String],
       validate: {
-        validator: (value: string[]) => value.length >= 5,
-        message: "At least 5 photos are required",
+        validator: (value: string[]) =>
+          value.length >= MIN_REGION_IMAGES &&
+          value.length <= MAX_REGION_IMAGES,
+        message: `At least ${MIN_REGION_IMAGES} and at most ${MAX_REGION_IMAGES} photos are required`,
       },
     },
     tipsAndTricks: {
       type: [String],
       default: [],
+      validate: {
+        validator: (value: string[]) => value.length <= MAX_TIPS_AND_TRICKS,
+        message: `At most ${MAX_TIPS_AND_TRICKS} tips and tricks are allowed`,
+      },
     },
     faqs: {
       type: [

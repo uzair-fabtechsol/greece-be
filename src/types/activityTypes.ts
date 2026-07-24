@@ -1,7 +1,7 @@
 interface CreateActivityBody {
   name: string;
   tagLine: string;
-  activityType: string;
+  type: string;
   status?: "draft" | "published" | "archived";
   about?: string;
   highlights?: string[];
@@ -32,7 +32,7 @@ interface GetActivitiesQuery {
   limit: number;
   sortBy: "name" | "createdAt" | "updatedAt";
   sortOrder: "asc" | "desc";
-  activityType?: string;
+  type?: string;
   status?: string;
   region?: string;
   destination?: string;

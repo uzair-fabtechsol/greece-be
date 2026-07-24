@@ -7,15 +7,15 @@ import {
   FOOD_SORT_FIELDS,
 } from "@src/constants/foodConstants";
 
-const foodTypeEnum = z.enum([
-  "local-dish",
+const typeEnum = z.enum([
+  "localDish",
   "meze",
-  "street-food",
+  "streetFood",
   "seafood",
   "dessert",
   "bakery",
   "cheese",
-  "olive-oil",
+  "oliveOil",
   "wine",
   "ouzo",
   "taverna",
@@ -27,7 +27,7 @@ const createFoodSchema = z
   .object({
     name: z.string().trim().min(2).max(100),
     tagLine: z.string().trim().min(1).max(150),
-    foodType: foodTypeEnum,
+    type: typeEnum,
     status: foodStatusEnum.optional(),
     about: z.string().trim().optional(),
     region: z.string().trim().min(1).optional(),
@@ -50,7 +50,7 @@ const updateFoodSchema = z
   .object({
     name: z.string().trim().min(2).max(100).optional(),
     tagLine: z.string().trim().min(1).max(150).optional(),
-    foodType: foodTypeEnum.optional(),
+    type: typeEnum.optional(),
     status: foodStatusEnum.optional(),
     about: z.string().trim().optional(),
     region: z.string().trim().min(1).optional(),
@@ -88,7 +88,7 @@ const getFoodsQuerySchema = z.object({
     .default(DEFAULT_FOODS_LIMIT),
   sortBy: z.enum(FOOD_SORT_FIELDS).default("createdAt"),
   sortOrder: z.enum(["asc", "desc"]).default("desc"),
-  foodType: foodTypeEnum.optional(),
+  type: typeEnum.optional(),
   status: foodStatusEnum.optional(),
   region: z.string().trim().optional(),
   destination: z.string().trim().optional(),

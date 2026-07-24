@@ -46,14 +46,14 @@ const createPlaceService = async (body: CreatePlaceBody) => {
 // FUNCTION
 const getPlacesService = async (query: GetPlacesQuery) => {
   // 1 : Extract filters, sorting, and pagination options from the query
-  const { search, page, limit, sortBy, sortOrder, placeType, status, destination } =
+  const { search, page, limit, sortBy, sortOrder, type, status, destination } =
     query;
 
   // 2 : Build the match stage from the provided filters
   const match: Record<string, unknown> = {};
 
   if (status) match.status = status;
-  if (placeType) match.placeType = placeType;
+  if (type) match.type = type;
   if (destination) match.destination = new Types.ObjectId(destination);
   if (search) {
     match.$or = [

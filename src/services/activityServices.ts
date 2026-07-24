@@ -89,7 +89,7 @@ const getActivitiesService = async (query: GetActivitiesQuery) => {
     limit,
     sortBy,
     sortOrder,
-    activityType,
+    type,
     status,
     region,
     destination,
@@ -100,7 +100,7 @@ const getActivitiesService = async (query: GetActivitiesQuery) => {
   const match: Record<string, unknown> = {};
 
   if (status) match.status = status;
-  if (activityType) match.activityType = activityType;
+  if (type) match.type = type;
   if (region) match.region = new Types.ObjectId(region);
   if (destination) match.destination = new Types.ObjectId(destination);
   if (place) match.place = new Types.ObjectId(place);

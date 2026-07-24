@@ -5,6 +5,7 @@ import {
   DEFAULT_DESTINATIONS_LIMIT,
   MAX_DESTINATIONS_LIMIT,
   DESTINATION_SORT_FIELDS,
+  MAX_TIPS_AND_TRICKS,
 } from "@src/constants/destinationConstants";
 
 const destinationTypeEnum = z.enum([
@@ -12,8 +13,8 @@ const destinationTypeEnum = z.enum([
   "city",
   "town",
   "village",
-  "coastal-town",
-  "mountain-village",
+  "coastalTown",
+  "mountainVillage",
   "archipelago",
 ]);
 
@@ -40,6 +41,10 @@ const createDestinationSchema = z.object({
   quickFacts: quickFactsSchema,
   about: z.string().trim().optional(),
   photoGallery: z.array(z.url()).min(MIN_DESTINATION_IMAGES),
+  tipsAndTricks: z
+    .array(z.string().trim())
+    .max(MAX_TIPS_AND_TRICKS)
+    .optional(),
   isFeatured: z.boolean().optional(),
 });
 

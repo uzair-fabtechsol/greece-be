@@ -1,6 +1,8 @@
 export const MIN_REGION_IMAGES = 5;
 export const MAX_REGION_IMAGES = 10;
 
+export const MAX_TIPS_AND_TRICKS = 10;
+
 export const DEFAULT_REGIONS_PAGE = 1;
 export const DEFAULT_REGIONS_LIMIT = 10;
 export const MAX_REGIONS_LIMIT = 50;

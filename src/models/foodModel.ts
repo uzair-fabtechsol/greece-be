@@ -1,15 +1,19 @@
 import { model, models, Schema, type InferSchemaType } from "mongoose";
 import { Status } from "@src/constants/enumConstants";
+import {
+  MIN_FOOD_IMAGES,
+  MAX_FOOD_IMAGES,
+} from "@src/constants/foodConstants";
 
 enum FoodType {
-  LocalDish = "local-dish",
+  LocalDish = "localDish",
   Meze = "meze",
-  StreetFood = "street-food",
+  StreetFood = "streetFood",
   Seafood = "seafood",
   Dessert = "dessert",
   Bakery = "bakery",
   Cheese = "cheese",
-  OliveOil = "olive-oil",
+  OliveOil = "oliveOil",
   Wine = "wine",
   Ouzo = "ouzo",
   Taverna = "taverna",
@@ -38,7 +42,7 @@ const foodSchema = new Schema(
       trim: true,
       maxlength: 150,
     },
-    foodType: {
+    type: {
       type: String,
       enum: Object.values(FoodType),
       required: true,
@@ -70,8 +74,9 @@ const foodSchema = new Schema(
     photoGallery: {
       type: [String],
       validate: {
-        validator: (value: string[]) => value.length >= 5,
-        message: "At least 5 photos are required",
+        validator: (value: string[]) =>
+          value.length >= MIN_FOOD_IMAGES && value.length <= MAX_FOOD_IMAGES,
+        message: `At least ${MIN_FOOD_IMAGES} and at most ${MAX_FOOD_IMAGES} photos are required`,
       },
     },
     isFeatured: {

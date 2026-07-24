@@ -3,24 +3,25 @@ import {
   MIN_PLACE_IMAGES,
   MAX_HERITAGE_ENTRIES,
   MAX_SUSTAINABILITY_NOTES,
+  MAX_TIPS_AND_TRICKS,
   DEFAULT_PLACES_PAGE,
   DEFAULT_PLACES_LIMIT,
   MAX_PLACES_LIMIT,
   PLACE_SORT_FIELDS,
 } from "@src/constants/placeConstants";
 
-const placeTypeEnum = z.enum([
+const typeEnum = z.enum([
   "beach",
   "viewpoint",
   "landmark",
   "village",
-  "archaeological-site",
+  "archaeologicalSite",
   "museum",
   "monastery",
   "church",
   "gorge",
   "cave",
-  "nature-reserve",
+  "natureReserve",
   "mountain",
   "lake",
   "waterfall",
@@ -39,7 +40,7 @@ const createPlaceSchema = z.object({
   destination: z.string().trim().min(1),
   name: z.string().trim().min(2).max(100),
   tagLine: z.string().trim().min(1).max(150),
-  placeType: placeTypeEnum,
+  type: typeEnum,
   status: placeStatusEnum.optional(),
   about: z.string().trim().optional(),
   heritage: z.array(heritageSchema).max(MAX_HERITAGE_ENTRIES).optional(),
@@ -48,7 +49,10 @@ const createPlaceSchema = z.object({
     .max(MAX_SUSTAINABILITY_NOTES)
     .optional(),
   photoGallery: z.array(z.url()).min(MIN_PLACE_IMAGES),
-  tipsAndTricks: z.array(z.string().trim()).optional(),
+  tipsAndTricks: z
+    .array(z.string().trim())
+    .max(MAX_TIPS_AND_TRICKS)
+    .optional(),
 });
 
 const updatePlaceSchema = createPlaceSchema.partial();
@@ -64,7 +68,7 @@ const getPlacesQuerySchema = z.object({
     .default(DEFAULT_PLACES_LIMIT),
   sortBy: z.enum(PLACE_SORT_FIELDS).default("createdAt"),
   sortOrder: z.enum(["asc", "desc"]).default("desc"),
-  placeType: placeTypeEnum.optional(),
+  type: typeEnum.optional(),
   status: placeStatusEnum.optional(),
   destination: z.string().trim().optional(),
 });

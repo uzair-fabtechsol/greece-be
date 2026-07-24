@@ -32,7 +32,7 @@ const getRegionsService = async (query: GetRegionsQuery) => {
     limit,
     sortBy,
     sortOrder,
-    regionType,
+    type,
     bestSeason,
     status,
   } = query;
@@ -41,7 +41,7 @@ const getRegionsService = async (query: GetRegionsQuery) => {
   const match: Record<string, unknown> = {};
 
   if (status) match.status = status;
-  if (regionType) match.regionType = regionType;
+  if (type) match.type = type;
   if (bestSeason) match.bestSeason = bestSeason;
   if (search) {
     match.$or = [

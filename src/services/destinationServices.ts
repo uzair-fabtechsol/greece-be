@@ -47,8 +47,17 @@ const createDestinationService = async (body: CreateDestinationBody) => {
 // FUNCTION
 const getDestinationsService = async (query: GetDestinationsQuery) => {
   // 1 : Extract filters, sorting, and pagination options from the query
-  const { search, page, limit, sortBy, sortOrder, type, status, bestSeason, region } =
-    query;
+  const {
+    search,
+    page,
+    limit,
+    sortBy,
+    sortOrder,
+    type,
+    status,
+    bestSeason,
+    region,
+  } = query;
 
   // 2 : Build the match stage from the provided filters
   const match: Record<string, unknown> = {};
@@ -58,10 +67,7 @@ const getDestinationsService = async (query: GetDestinationsQuery) => {
   if (bestSeason) match["quickFacts.bestSeason"] = bestSeason;
   if (region) match.region = new Types.ObjectId(region);
   if (search) {
-    match.$or = [
-      { name: { $regex: search, $options: "i" } },
-      { about: { $regex: search, $options: "i" } },
-    ];
+    match.$or = [{ name: { $regex: search, $options: "i" } }];
   }
 
   const skip = (page - 1) * limit;
@@ -72,11 +78,7 @@ const getDestinationsService = async (query: GetDestinationsQuery) => {
     { $sort: { [sortBy]: sortOrder === "asc" ? 1 : -1 } },
     {
       $facet: {
-        data: [
-          { $skip: skip },
-          { $limit: limit },
-          ...regionLookupStages,
-        ],
+        data: [{ $skip: skip }, { $limit: limit }, ...regionLookupStages],
         totalCount: [{ $count: "count" }],
       },
     },

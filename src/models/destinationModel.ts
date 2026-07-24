@@ -1,13 +1,18 @@
 import { model, models, Schema, type InferSchemaType } from "mongoose";
 import { Season, Status } from "@src/constants/enumConstants";
+import {
+  MIN_DESTINATION_IMAGES,
+  MAX_DESTINATION_IMAGES,
+  MAX_TIPS_AND_TRICKS,
+} from "@src/constants/destinationConstants";
 
 enum DestinationType {
   Island = "island",
   City = "city",
   Town = "town",
   Village = "village",
-  CoastalTown = "coastal-town",
-  MountainVillage = "mountain-village",
+  CoastalTown = "coastalTown",
+  MountainVillage = "mountainVillage",
   Archipelago = "archipelago",
 }
 
@@ -32,6 +37,12 @@ const destinationSchema = new Schema(
       trim: true,
       lowercase: true,
       index: true,
+    },
+    tagLine: {
+      type: String,
+      required: true,
+      trim: true,
+      maxlength: 150,
     },
     type: {
       type: String,
@@ -87,8 +98,18 @@ const destinationSchema = new Schema(
     photoGallery: {
       type: [String],
       validate: {
-        validator: (value: string[]) => value.length >= 5,
-        message: "At least 5 photos are required",
+        validator: (value: string[]) =>
+          value.length >= MIN_DESTINATION_IMAGES &&
+          value.length <= MAX_DESTINATION_IMAGES,
+        message: `At least ${MIN_DESTINATION_IMAGES} and at most ${MAX_DESTINATION_IMAGES} photos are required`,
+      },
+    },
+    tipsAndTricks: {
+      type: [String],
+      default: [],
+      validate: {
+        validator: (value: string[]) => value.length <= MAX_TIPS_AND_TRICKS,
+        message: `At most ${MAX_TIPS_AND_TRICKS} tips and tricks are allowed`,
       },
     },
     isFeatured: {

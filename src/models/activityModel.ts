@@ -1,22 +1,30 @@
 import { model, models, Schema, type InferSchemaType } from "mongoose";
 import { Status } from "@src/constants/enumConstants";
+import {
+  MIN_ACTIVITY_IMAGES,
+  MAX_ACTIVITY_IMAGES,
+  MAX_HIGHLIGHTS,
+  MAX_WHATS_INCLUDED,
+  MAX_WHAT_TO_EXPECT,
+  MAX_GOOD_TO_KNOW,
+} from "@src/constants/activityConstants";
 
 enum ActivityType {
   Boating = "boating",
   Hiking = "hiking",
-  ScubaDiving = "scuba-diving",
+  ScubaDiving = "scubaDiving",
   Snorkeling = "snorkeling",
   Sailing = "sailing",
   Kayaking = "kayaking",
   Windsurfing = "windsurfing",
   Paragliding = "paragliding",
-  WineTasting = "wine-tasting",
-  CookingClass = "cooking-class",
-  CulturalTour = "cultural-tour",
-  PhotographyTour = "photography-tour",
-  HorsebackRiding = "horseback-riding",
+  WineTasting = "wineTasting",
+  CookingClass = "cookingClass",
+  CulturalTour = "culturalTour",
+  PhotographyTour = "photographyTour",
+  HorsebackRiding = "horsebackRiding",
   Cycling = "cycling",
-  RockClimbing = "rock-climbing",
+  RockClimbing = "rockClimbing",
   Fishing = "fishing",
 }
 
@@ -43,7 +51,7 @@ const activitySchema = new Schema(
       trim: true,
       maxlength: 150,
     },
-    activityType: {
+    type: {
       type: String,
       enum: Object.values(ActivityType),
       required: true,
@@ -61,32 +69,32 @@ const activitySchema = new Schema(
       type: [String],
       default: [],
       validate: {
-        validator: (value: string[]) => value.length <= 5,
-        message: "At most 5 highlights are allowed",
+        validator: (value: string[]) => value.length <= MAX_HIGHLIGHTS,
+        message: `At most ${MAX_HIGHLIGHTS} highlights are allowed`,
       },
     },
     whatsIncluded: {
       type: [String],
       default: [],
       validate: {
-        validator: (value: string[]) => value.length <= 5,
-        message: "At most 5 items are allowed",
+        validator: (value: string[]) => value.length <= MAX_WHATS_INCLUDED,
+        message: `At most ${MAX_WHATS_INCLUDED} items are allowed`,
       },
     },
     whatToExpect: {
       type: [String],
       default: [],
       validate: {
-        validator: (value: string[]) => value.length <= 5,
-        message: "At most 5 items are allowed",
+        validator: (value: string[]) => value.length <= MAX_WHAT_TO_EXPECT,
+        message: `At most ${MAX_WHAT_TO_EXPECT} items are allowed`,
       },
     },
     goodToKnow: {
       type: [String],
       default: [],
       validate: {
-        validator: (value: string[]) => value.length <= 5,
-        message: "At most 5 items are allowed",
+        validator: (value: string[]) => value.length <= MAX_GOOD_TO_KNOW,
+        message: `At most ${MAX_GOOD_TO_KNOW} items are allowed`,
       },
     },
     region: {
@@ -107,8 +115,10 @@ const activitySchema = new Schema(
     photoGallery: {
       type: [String],
       validate: {
-        validator: (value: string[]) => value.length >= 5,
-        message: "At least 5 photos are required",
+        validator: (value: string[]) =>
+          value.length >= MIN_ACTIVITY_IMAGES &&
+          value.length <= MAX_ACTIVITY_IMAGES,
+        message: `At least ${MIN_ACTIVITY_IMAGES} and at most ${MAX_ACTIVITY_IMAGES} photos are required`,
       },
     },
     isFeatured: {

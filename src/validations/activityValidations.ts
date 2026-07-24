@@ -11,22 +11,22 @@ import {
   ACTIVITY_SORT_FIELDS,
 } from "@src/constants/activityConstants";
 
-const activityTypeEnum = z.enum([
+const typeEnum = z.enum([
   "boating",
   "hiking",
-  "scuba-diving",
+  "scubaDiving",
   "snorkeling",
   "sailing",
   "kayaking",
   "windsurfing",
   "paragliding",
-  "wine-tasting",
-  "cooking-class",
-  "cultural-tour",
-  "photography-tour",
-  "horseback-riding",
+  "wineTasting",
+  "cookingClass",
+  "culturalTour",
+  "photographyTour",
+  "horsebackRiding",
   "cycling",
-  "rock-climbing",
+  "rockClimbing",
   "fishing",
 ]);
 
@@ -36,7 +36,7 @@ const createActivitySchema = z
   .object({
     name: z.string().trim().min(2).max(100),
     tagLine: z.string().trim().min(1).max(150),
-    activityType: activityTypeEnum,
+    type: typeEnum,
     status: activityStatusEnum.optional(),
     about: z.string().trim().optional(),
     highlights: z.array(z.string().trim()).max(MAX_HIGHLIGHTS).optional(),
@@ -69,7 +69,7 @@ const updateActivitySchema = z
   .object({
     name: z.string().trim().min(2).max(100).optional(),
     tagLine: z.string().trim().min(1).max(150).optional(),
-    activityType: activityTypeEnum.optional(),
+    type: typeEnum.optional(),
     status: activityStatusEnum.optional(),
     about: z.string().trim().optional(),
     highlights: z.array(z.string().trim()).max(MAX_HIGHLIGHTS).optional(),
@@ -117,7 +117,7 @@ const getActivitiesQuerySchema = z.object({
     .default(DEFAULT_ACTIVITIES_LIMIT),
   sortBy: z.enum(ACTIVITY_SORT_FIELDS).default("createdAt"),
   sortOrder: z.enum(["asc", "desc"]).default("desc"),
-  activityType: activityTypeEnum.optional(),
+  type: typeEnum.optional(),
   status: activityStatusEnum.optional(),
   region: z.string().trim().optional(),
   destination: z.string().trim().optional(),

@@ -3,6 +3,7 @@ export const MAX_PLACE_IMAGES = 10;
 
 export const MAX_HERITAGE_ENTRIES = 10;
 export const MAX_SUSTAINABILITY_NOTES = 10;
+export const MAX_TIPS_AND_TRICKS = 10;
 
 export const DEFAULT_PLACES_PAGE = 1;
 export const DEFAULT_PLACES_LIMIT = 10;

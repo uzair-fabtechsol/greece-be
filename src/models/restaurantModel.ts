@@ -1,25 +1,29 @@
 import { model, models, Schema, type InferSchemaType } from "mongoose";
 import { Status } from "@src/constants/enumConstants";
+import {
+  MIN_RESTAURANT_IMAGES,
+  MAX_RESTAURANT_IMAGES,
+} from "@src/constants/restaurantConstants";
 
 enum RestaurantType {
-  FineDining = "fine-dining",
-  CasualDining = "casual-dining",
+  FineDining = "fineDining",
+  CasualDining = "casualDining",
   Taverna = "taverna",
   Cafe = "cafe",
   Bakery = "bakery",
-  StreetFood = "street-food",
+  StreetFood = "streetFood",
   Seafood = "seafood",
   Bar = "bar",
-  WineBar = "wine-bar",
-  BeachBar = "beach-bar",
-  FastFood = "fast-food",
+  WineBar = "wineBar",
+  BeachBar = "beachBar",
+  FastFood = "fastFood",
   Bistro = "bistro",
 }
 
 enum PriceRange {
   Budget = "budget",
-  MidRange = "mid-range",
-  FineDining = "fine-dining",
+  MidRange = "midRange",
+  Premium = "premium",
   Luxury = "luxury",
 }
 
@@ -40,7 +44,7 @@ const restaurantSchema = new Schema(
       lowercase: true,
       index: true,
     },
-    restaurantType: {
+    type: {
       type: String,
       enum: Object.values(RestaurantType),
       required: true,
@@ -77,8 +81,10 @@ const restaurantSchema = new Schema(
     photoGallery: {
       type: [String],
       validate: {
-        validator: (value: string[]) => value.length >= 5,
-        message: "At least 5 photos are required",
+        validator: (value: string[]) =>
+          value.length >= MIN_RESTAURANT_IMAGES &&
+          value.length <= MAX_RESTAURANT_IMAGES,
+        message: `At least ${MIN_RESTAURANT_IMAGES} and at most ${MAX_RESTAURANT_IMAGES} photos are required`,
       },
     },
     isFeatured: {

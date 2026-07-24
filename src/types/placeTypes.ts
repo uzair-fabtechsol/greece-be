@@ -2,7 +2,7 @@ interface CreatePlaceBody {
   destination: string;
   name: string;
   tagLine: string;
-  placeType: string;
+  type: string;
   status?: "draft" | "published" | "archived";
   about?: string;
   heritage?: { image: string; historicalFact: string }[];
@@ -19,7 +19,7 @@ interface GetPlacesQuery {
   limit: number;
   sortBy: "name" | "createdAt" | "updatedAt";
   sortOrder: "asc" | "desc";
-  placeType?: string;
+  type?: string;
   status?: string;
   destination?: string;
 }
