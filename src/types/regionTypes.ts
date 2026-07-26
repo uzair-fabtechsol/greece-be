@@ -14,6 +14,7 @@ type UpdateRegionBody = Partial<CreateRegionBody>;
 
 interface GetRegionsQuery {
   search?: string;
+  projection?: string;
   page: number;
   limit: number;
   sortBy: "name" | "createdAt" | "updatedAt";

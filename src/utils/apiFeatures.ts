@@ -3,6 +3,7 @@ import type { Pagination } from "@src/utils/sendResponse";
 
 interface BaseListQuery {
   search?: string;
+  projection?: string;
   page: number;
   limit: number;
   sortBy: string;
@@ -20,8 +21,13 @@ class APIFeatures<T> {
   private model: Model<T>;
   private query: BaseListQuery;
   private pipeline: PipelineStage[];
+  private isPaginated = false;
 
-  constructor(model: Model<T>, query: BaseListQuery, basePipeline: PipelineStage[] = []) {
+  constructor(
+    model: Model<T>,
+    query: BaseListQuery,
+    basePipeline: PipelineStage[],
+  ) {
     this.model = model;
     this.query = query;
     this.pipeline = [...basePipeline];
@@ -73,6 +79,26 @@ class APIFeatures<T> {
     return this;
   }
 
+  // Adds a $project stage limiting the returned fields to those submitted
+  // in the query as a comma-separated list (e.g. "name,slug"), only if a
+  // projection was actually requested.
+  projection(): this {
+    if (this.query.projection) {
+      const fields = this.query.projection.split(",").map((field) => field.trim()).filter(Boolean);
+      const project: Record<string, 1> = {};
+
+      for (const field of fields) {
+        project[field] = 1;
+      }
+
+      if (Object.keys(project).length > 0) {
+        this.pipeline.push({ $project: project });
+      }
+    }
+
+    return this;
+  }
+
   // Adds the $facet stage that pages the results and counts the total in one round trip.
   paginate(): this {
     const { page, limit } = this.query;
@@ -85,14 +111,22 @@ class APIFeatures<T> {
       },
     });
 
+    this.isPaginated = true;
     return this;
   }
 
-  // Runs the assembled pipeline and returns the page of results alongside pagination metadata.
-  async exec(): Promise<{ data: T[]; pagination: Pagination }> {
-    const { page, limit } = this.query;
+  // Runs the assembled pipeline. If .paginate() was chained, unwraps the
+  // $facet result and returns pagination metadata; otherwise returns every
+  // matching document as-is, with pagination set to null.
+  async exec(): Promise<{ data: T[]; pagination: Pagination | null }> {
+    const results = await this.model.aggregate(this.pipeline);
 
-    const [result] = await this.model.aggregate(this.pipeline);
+    if (!this.isPaginated) {
+      return { data: results as T[], pagination: null };
+    }
+
+    const { page, limit } = this.query;
+    const [result] = results;
     const data: T[] = result?.data ?? [];
     const totalDocuments: number = result?.totalCount[0]?.count ?? 0;
     const totalPages = Math.ceil(totalDocuments / limit);

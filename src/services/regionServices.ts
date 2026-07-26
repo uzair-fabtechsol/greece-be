@@ -1,3 +1,4 @@
+import type { PipelineStage } from "mongoose";
 import RegionModel from "@src/models/regionModel";
 import DestinationModel from "@src/models/destinationModel";
 import { deleteImagesFromS3 } from "@src/services/s3Services";
@@ -24,19 +25,25 @@ const createRegionService = async (body: CreateRegionBody) => {
 
 // FUNCTION
 const getRegionsService = async (query: GetRegionsQuery) => {
-  // 1 : Build and run the aggregation pipeline to get the page of results
+  // 1 : Regions have no resource-specific stages (e.g. reference casting),
+  // so the base pipeline is empty
+  const basePipeline: PipelineStage[] = [];
+
+  // 2 : Build and run the aggregation pipeline to get the page of results
   // and the total count in one round trip
   const { data: regions, pagination } = await new APIFeatures(
     RegionModel,
     query,
+    basePipeline,
   )
     .filter(["status", "type", "bestSeason"])
     .search(["name", "tagLine"])
     .sort()
+    .projection()
     .paginate()
     .exec();
 
-  // 2 : Send response
+  // 3 : Send response
   return { regions, pagination };
 };
 
