@@ -5,12 +5,12 @@ import PlaceModel from "@src/models/placeModel";
 import { deleteImagesFromS3 } from "@src/services/s3Services";
 import AppError from "@src/utils/appError";
 import { generateUniqueSlug } from "@src/utils/slug";
+import APIFeatures from "@src/utils/apiFeatures";
 import type {
   CreateDestinationBody,
   UpdateDestinationBody,
   GetDestinationsQuery,
 } from "@src/types/destinationTypes";
-import type { Pagination } from "@src/utils/sendResponse";
 
 const regionLookupStages: PipelineStage.FacetPipelineStage[] = [
   {
@@ -46,60 +46,32 @@ const createDestinationService = async (body: CreateDestinationBody) => {
 
 // FUNCTION
 const getDestinationsService = async (query: GetDestinationsQuery) => {
-  // 1 : Extract filters, sorting, and pagination options from the query
-  const {
-    search,
-    page,
-    limit,
-    sortBy,
-    sortOrder,
-    type,
-    status,
-    bestSeason,
-    region,
-  } = query;
-
-  // 2 : Build the match stage from the provided filters
-  const match: Record<string, unknown> = {};
-
-  if (status) match.status = status;
-  if (type) match.type = type;
-  if (bestSeason) match["quickFacts.bestSeason"] = bestSeason;
-  if (region) match.region = new Types.ObjectId(region);
-  if (search) {
-    match.$or = [{ name: { $regex: search, $options: "i" } }];
-  }
-
-  const skip = (page - 1) * limit;
-
-  // 3 : Run the aggregation pipeline to get the page of results and the total count in one round trip
-  const pipeline: PipelineStage[] = [
-    { $match: match },
-    { $sort: { [sortBy]: sortOrder === "asc" ? 1 : -1 } },
-    {
-      $facet: {
-        data: [{ $skip: skip }, { $limit: limit }, ...regionLookupStages],
-        totalCount: [{ $count: "count" }],
-      },
-    },
-  ];
-
-  const [result] = await DestinationModel.aggregate(pipeline);
-  const destinations = result?.data ?? [];
-  const totalDocuments: number = result?.totalCount[0]?.count ?? 0;
-  const totalPages = Math.ceil(totalDocuments / limit);
-
-  // 4 : Build the pagination metadata
-  const pagination: Pagination = {
-    page,
-    limit,
-    totalDocuments,
-    totalPages,
-    hasNextPage: page < totalPages,
-    hasPrevPage: page > 1,
+  // 1 : Region needs ObjectId casting and quickFacts.bestSeason is nested,
+  // so normalize those onto the query before handing it to APIFeatures
+  const filterQuery = {
+    ...query,
+    region: query.region ? new Types.ObjectId(query.region) : undefined,
+    "quickFacts.bestSeason": query.bestSeason,
   };
 
-  // 5 : Send response
+  // 2 : Resource-specific stage: join the referenced region onto each result
+  const basePipeline: PipelineStage[] = [...regionLookupStages];
+
+  // 3 : Build and run the aggregation pipeline to get the page of results
+  // and the total count in one round trip
+  const { data: destinations, pagination } = await new APIFeatures(
+    DestinationModel,
+    filterQuery,
+    basePipeline,
+  )
+    .filter(["status", "type", "quickFacts.bestSeason", "region"])
+    .search(["name"])
+    .sort()
+    .projection()
+    .paginate()
+    .exec();
+
+  // 4 : Send response
   return { destinations, pagination };
 };
 

@@ -62,6 +62,7 @@ const updateFeaturedStatusSchema = z.object({
 
 const getDestinationsQuerySchema = z.object({
   search: z.string().trim().optional(),
+  projection: z.string().trim().optional(),
   page: z.coerce.number().int().min(1).default(DEFAULT_DESTINATIONS_PAGE),
   limit: z.coerce
     .number()

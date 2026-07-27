@@ -28,6 +28,7 @@ interface UpdateFeaturedStatusBody {
 
 interface GetDestinationsQuery {
   search?: string;
+  projection?: string;
   page: number;
   limit: number;
   sortBy: "name" | "createdAt" | "updatedAt";
