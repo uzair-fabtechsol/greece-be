@@ -4,12 +4,12 @@ import DestinationModel from "@src/models/destinationModel";
 import { deleteImagesFromS3 } from "@src/services/s3Services";
 import AppError from "@src/utils/appError";
 import { generateUniqueSlug } from "@src/utils/slug";
+import APIFeatures from "@src/utils/apiFeatures";
 import type {
   CreatePlaceBody,
   UpdatePlaceBody,
   GetPlacesQuery,
 } from "@src/types/placeTypes";
-import type { Pagination } from "@src/utils/sendResponse";
 
 const destinationLookupStages: PipelineStage.FacetPipelineStage[] = [
   {
@@ -45,53 +45,32 @@ const createPlaceService = async (body: CreatePlaceBody) => {
 
 // FUNCTION
 const getPlacesService = async (query: GetPlacesQuery) => {
-  // 1 : Extract filters, sorting, and pagination options from the query
-  const { search, page, limit, sortBy, sortOrder, type, status, destination } =
-    query;
-
-  // 2 : Build the match stage from the provided filters
-  const match: Record<string, unknown> = {};
-
-  if (status) match.status = status;
-  if (type) match.type = type;
-  if (destination) match.destination = new Types.ObjectId(destination);
-  if (search) {
-    match.$or = [
-      { name: { $regex: search, $options: "i" } },
-      { tagLine: { $regex: search, $options: "i" } },
-    ];
-  }
-
-  const skip = (page - 1) * limit;
-
-  // 3 : Run the aggregation pipeline to get the page of results and the total count in one round trip
-  const pipeline: PipelineStage[] = [
-    { $match: match },
-    { $sort: { [sortBy]: sortOrder === "asc" ? 1 : -1 } },
-    {
-      $facet: {
-        data: [{ $skip: skip }, { $limit: limit }, ...destinationLookupStages],
-        totalCount: [{ $count: "count" }],
-      },
-    },
-  ];
-
-  const [result] = await PlaceModel.aggregate(pipeline);
-  const places = result?.data ?? [];
-  const totalDocuments: number = result?.totalCount[0]?.count ?? 0;
-  const totalPages = Math.ceil(totalDocuments / limit);
-
-  // 4 : Build the pagination metadata
-  const pagination: Pagination = {
-    page,
-    limit,
-    totalDocuments,
-    totalPages,
-    hasNextPage: page < totalPages,
-    hasPrevPage: page > 1,
+  // 1 : Destination needs ObjectId casting before it can be matched
+  const filterQuery = {
+    ...query,
+    destination: query.destination
+      ? new Types.ObjectId(query.destination)
+      : undefined,
   };
 
-  // 5 : Send response
+  // 2 : Resource-specific stage: join the referenced destination onto each result
+  const basePipeline: PipelineStage[] = [...destinationLookupStages];
+
+  // 3 : Build and run the aggregation pipeline to get the page of results
+  // and the total count in one round trip
+  const { data: places, pagination } = await new APIFeatures(
+    PlaceModel,
+    filterQuery,
+    basePipeline,
+  )
+    .filter(["status", "type", "destination"])
+    .search(["name", "tagLine"])
+    .sort()
+    .projection()
+    .paginate()
+    .exec();
+
+  // 4 : Send response
   return { places, pagination };
 };
 

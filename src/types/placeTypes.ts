@@ -15,6 +15,7 @@ type UpdatePlaceBody = Partial<CreatePlaceBody>;
 
 interface GetPlacesQuery {
   search?: string;
+  projection?: string;
   page: number;
   limit: number;
   sortBy: "name" | "createdAt" | "updatedAt";
