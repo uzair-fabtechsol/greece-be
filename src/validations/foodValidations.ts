@@ -89,6 +89,7 @@ const updateIndexableStatusSchema = z.object({
 
 const getFoodsQuerySchema = z.object({
   search: z.string().trim().optional(),
+  projection: z.string().trim().optional(),
   page: z.coerce.number().int().min(1).default(DEFAULT_FOODS_PAGE),
   limit: z.coerce
     .number()

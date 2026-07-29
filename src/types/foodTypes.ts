@@ -24,6 +24,7 @@ interface UpdateIndexableStatusBody {
 
 interface GetFoodsQuery {
   search?: string;
+  projection?: string;
   page: number;
   limit: number;
   sortBy: "name" | "createdAt" | "updatedAt";

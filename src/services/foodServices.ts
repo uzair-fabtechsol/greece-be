@@ -4,12 +4,12 @@ import { deleteImagesFromS3 } from "@src/services/s3Services";
 import AppError from "@src/utils/appError";
 import { generateUniqueSlug } from "@src/utils/slug";
 import { resolveReference } from "@src/utils/resolveReference";
+import APIFeatures from "@src/utils/apiFeatures";
 import type {
   CreateFoodBody,
   UpdateFoodBody,
   GetFoodsQuery,
 } from "@src/types/foodTypes";
-import type { Pagination } from "@src/utils/sendResponse";
 
 // FUNCTION
 const createFoodService = async (body: CreateFoodBody) => {
@@ -32,65 +32,34 @@ const createFoodService = async (body: CreateFoodBody) => {
 
 // FUNCTION
 const getFoodsService = async (query: GetFoodsQuery) => {
-  // 1 : Extract filters, sorting, and pagination options from the query
-  const {
-    search,
-    page,
-    limit,
-    sortBy,
-    sortOrder,
-    type,
-    status,
-    region,
-    destination,
-    place,
-  } = query;
-
-  // 2 : Build the match stage from the provided filters
-  const match: Record<string, unknown> = {};
-
-  if (status) match.status = status;
-  if (type) match.type = type;
-  if (region) match.region = new Types.ObjectId(region);
-  if (destination) match.destination = new Types.ObjectId(destination);
-  if (place) match.place = new Types.ObjectId(place);
-  if (search) {
-    match.$or = [
-      { name: { $regex: search, $options: "i" } },
-      { about: { $regex: search, $options: "i" } },
-    ];
-  }
-
-  const skip = (page - 1) * limit;
-
-  // 3 : Run the aggregation pipeline to get the page of results and the total count in one round trip
-  const pipeline: PipelineStage[] = [
-    { $match: match },
-    { $sort: { [sortBy]: sortOrder === "asc" ? 1 : -1 } },
-    {
-      $facet: {
-        data: [{ $skip: skip }, { $limit: limit }],
-        totalCount: [{ $count: "count" }],
-      },
-    },
-  ];
-
-  const [result] = await FoodModel.aggregate(pipeline);
-  const foods = result?.data ?? [];
-  const totalDocuments: number = result?.totalCount[0]?.count ?? 0;
-  const totalPages = Math.ceil(totalDocuments / limit);
-
-  // 4 : Build the pagination metadata
-  const pagination: Pagination = {
-    page,
-    limit,
-    totalDocuments,
-    totalPages,
-    hasNextPage: page < totalPages,
-    hasPrevPage: page > 1,
+  // 1 : The three reference filters need ObjectId casting before they can be matched
+  const filterQuery = {
+    ...query,
+    region: query.region ? new Types.ObjectId(query.region) : undefined,
+    destination: query.destination
+      ? new Types.ObjectId(query.destination)
+      : undefined,
+    place: query.place ? new Types.ObjectId(query.place) : undefined,
   };
 
-  // 5 : Send response
+  // 2 : Foods carry no joined references, so there are no base stages
+  const basePipeline: PipelineStage[] = [];
+
+  // 3 : Build and run the aggregation pipeline to get the page of results
+  // and the total count in one round trip
+  const { data: foods, pagination } = await new APIFeatures(
+    FoodModel,
+    filterQuery,
+    basePipeline,
+  )
+    .filter(["status", "type", "region", "destination", "place"])
+    .search(["name", "about"])
+    .sort()
+    .projection()
+    .paginate()
+    .exec();
+
+  // 4 : Send response
   return { foods, pagination };
 };
 
