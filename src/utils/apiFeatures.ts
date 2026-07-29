@@ -84,7 +84,10 @@ class APIFeatures<T> {
   // projection was actually requested.
   projection(): this {
     if (this.query.projection) {
-      const fields = this.query.projection.split(",").map((field) => field.trim()).filter(Boolean);
+      const fields = this.query.projection
+        .split(",")
+        .map((field) => field.trim())
+        .filter(Boolean);
       const project: Record<string, 1> = {};
 
       for (const field of fields) {
@@ -119,6 +122,11 @@ class APIFeatures<T> {
   // $facet result and returns pagination metadata; otherwise returns every
   // matching document as-is, with pagination set to null.
   async exec(): Promise<{ data: T[]; pagination: Pagination | null }> {
+    console.log(
+      "pipeline ---------------------------------- \n",
+      this.pipeline,
+    );
+
     const results = await this.model.aggregate(this.pipeline);
 
     if (!this.isPaginated) {

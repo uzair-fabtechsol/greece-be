@@ -48,7 +48,7 @@ const getPlacesService = async (query: GetPlacesQuery) => {
   // 1 : Destination needs ObjectId casting before it can be matched
   const filterQuery = {
     ...query,
-    destination: query.destination
+    "destinationDetails._id": query.destination
       ? new Types.ObjectId(query.destination)
       : undefined,
   };
@@ -63,7 +63,7 @@ const getPlacesService = async (query: GetPlacesQuery) => {
     filterQuery,
     basePipeline,
   )
-    .filter(["status", "type", "destination"])
+    .filter(["status", "type", "destinationDetails._id"])
     .search(["name"])
     .sort()
     .projection()

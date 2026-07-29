@@ -50,7 +50,9 @@ const getDestinationsService = async (query: GetDestinationsQuery) => {
   // so normalize those onto the query before handing it to APIFeatures
   const filterQuery = {
     ...query,
-    region: query.region ? new Types.ObjectId(query.region) : undefined,
+    "regionDetails._id": query.region
+      ? new Types.ObjectId(query.region)
+      : undefined,
     "quickFacts.bestSeason": query.bestSeason,
   };
 
@@ -64,7 +66,7 @@ const getDestinationsService = async (query: GetDestinationsQuery) => {
     filterQuery,
     basePipeline,
   )
-    .filter(["status", "type", "quickFacts.bestSeason", "region"])
+    .filter(["status", "type", "quickFacts.bestSeason", "regionDetails._id"])
     .search(["name"])
     .sort()
     .projection()
