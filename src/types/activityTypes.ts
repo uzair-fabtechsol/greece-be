@@ -28,6 +28,7 @@ interface UpdateIndexableStatusBody {
 
 interface GetActivitiesQuery {
   search?: string;
+  projection?: string;
   page: number;
   limit: number;
   sortBy: "name" | "createdAt" | "updatedAt";
