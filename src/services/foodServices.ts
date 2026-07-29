@@ -53,7 +53,7 @@ const getFoodsService = async (query: GetFoodsQuery) => {
     basePipeline,
   )
     .filter(["status", "type", "region", "destination", "place"])
-    .search(["name", "about"])
+    .search(["name"])
     .sort()
     .projection()
     .paginate()

@@ -37,7 +37,7 @@ const getRegionsService = async (query: GetRegionsQuery) => {
     basePipeline,
   )
     .filter(["status", "type", "bestSeason"])
-    .search(["name", "tagLine"])
+    .search(["name"])
     .sort()
     .projection()
     .paginate()

@@ -53,7 +53,7 @@ const getRestaurantsService = async (query: GetRestaurantsQuery) => {
     basePipeline,
   )
     .filter(["status", "type", "priceRange", "region", "destination", "place"])
-    .search(["name", "about"])
+    .search(["name"])
     .sort()
     .projection()
     .paginate()

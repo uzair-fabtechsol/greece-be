@@ -64,7 +64,7 @@ const getPlacesService = async (query: GetPlacesQuery) => {
     basePipeline,
   )
     .filter(["status", "type", "destination"])
-    .search(["name", "tagLine"])
+    .search(["name"])
     .sort()
     .projection()
     .paginate()
