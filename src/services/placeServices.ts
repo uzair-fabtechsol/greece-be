@@ -3,6 +3,7 @@ import PlaceModel from "@src/models/placeModel";
 import DestinationModel from "@src/models/destinationModel";
 import { deleteImagesFromS3 } from "@src/services/s3Services";
 import AppError from "@src/utils/appError";
+import { assertNoLinkedContent } from "@src/utils/deleteGuards";
 import { generateUniqueSlug } from "@src/utils/slug";
 import APIFeatures from "@src/utils/apiFeatures";
 import type {
@@ -76,19 +77,21 @@ const getPlacesService = async (query: GetPlacesQuery) => {
 
 // FUNCTION
 const getPlaceByIdService = async (id: string) => {
-  // 1 : Fetch the place with its destination populated as destinationDetails
-  const pipeline: PipelineStage[] = [
-    { $match: { _id: new Types.ObjectId(id) } },
-    ...destinationLookupStages,
-  ];
+  // 1 : Find the place by id, pulling in the referenced destination
+  const placeDoc = await PlaceModel.findById(id).populate<{
+    destination: { _id: Types.ObjectId; name: string };
+  }>("destination", "name");
 
-  const [place] = await PlaceModel.aggregate(pipeline);
-  if (!place) {
+  if (!placeDoc) {
     throw new AppError(404, "Place not found");
   }
 
-  // 2 : Send response
-  return { place };
+  // 2 : Expose the destination as destinationDetails so the detail response
+  // keeps the same shape the list endpoint's $lookup produces
+  const { destination, ...place } = placeDoc.toObject();
+
+  // 3 : Send response
+  return { place: { ...place, destinationDetails: destination } };
 };
 
 // FUNCTION
@@ -162,10 +165,13 @@ const deletePlaceService = async (id: string) => {
     throw new AppError(404, "Place not found");
   }
 
-  // 2 : Delete the place
+  // 2 : Prevent deletion if any activity, food or restaurant references it
+  await assertNoLinkedContent("place", id);
+
+  // 3 : Delete the place
   await place.deleteOne();
 
-  // 3 : Clean up its photo gallery and heritage images from S3
+  // 4 : Clean up its photo gallery and heritage images from S3
   const imagesToDelete = [
     ...place.photoGallery,
     ...(place.heritage ?? []).map((h: { image: string }) => h.image),

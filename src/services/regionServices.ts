@@ -3,6 +3,7 @@ import RegionModel from "@src/models/regionModel";
 import DestinationModel from "@src/models/destinationModel";
 import { deleteImagesFromS3 } from "@src/services/s3Services";
 import AppError from "@src/utils/appError";
+import { assertNoLinkedContent } from "@src/utils/deleteGuards";
 import { generateUniqueSlug } from "@src/utils/slug";
 import APIFeatures from "@src/utils/apiFeatures";
 import type {
@@ -116,15 +117,18 @@ const deleteRegionService = async (id: string) => {
     );
   }
 
-  // 3 : Delete the region
+  // 3 : Prevent deletion if any activity, food or restaurant references it
+  await assertNoLinkedContent("region", id);
+
+  // 4 : Delete the region
   await region.deleteOne();
 
-  // 4 : Clean up its photo gallery images from S3
+  // 5 : Clean up its photo gallery images from S3
   if (region.photoGallery.length > 0) {
     await deleteImagesFromS3(region.photoGallery);
   }
 
-  // 5 : Send response
+  // 6 : Send response
   return null;
 };
 

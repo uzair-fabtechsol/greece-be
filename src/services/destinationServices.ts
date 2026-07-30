@@ -4,6 +4,7 @@ import RegionModel from "@src/models/regionModel";
 import PlaceModel from "@src/models/placeModel";
 import { deleteImagesFromS3 } from "@src/services/s3Services";
 import AppError from "@src/utils/appError";
+import { assertNoLinkedContent } from "@src/utils/deleteGuards";
 import { generateUniqueSlug } from "@src/utils/slug";
 import APIFeatures from "@src/utils/apiFeatures";
 import type {
@@ -79,19 +80,21 @@ const getDestinationsService = async (query: GetDestinationsQuery) => {
 
 // FUNCTION
 const getDestinationByIdService = async (id: string) => {
-  // 1 : Fetch the destination with its region populated as regionDetails
-  const pipeline: PipelineStage[] = [
-    { $match: { _id: new Types.ObjectId(id) } },
-    ...regionLookupStages,
-  ];
+  // 1 : Find the destination by id, pulling in the referenced region
+  const destinationDoc = await DestinationModel.findById(id).populate<{
+    region: { _id: Types.ObjectId; name: string };
+  }>("region", "name");
 
-  const [destination] = await DestinationModel.aggregate(pipeline);
-  if (!destination) {
+  if (!destinationDoc) {
     throw new AppError(404, "Destination not found");
   }
 
-  // 2 : Send response
-  return { destination };
+  // 2 : Expose the region as regionDetails so the detail response keeps the
+  // same shape the list endpoint's $lookup produces
+  const { region, ...destination } = destinationDoc.toObject();
+
+  // 3 : Send response
+  return { destination: { ...destination, regionDetails: region } };
 };
 
 // FUNCTION
@@ -162,15 +165,18 @@ const deleteDestinationService = async (id: string) => {
     );
   }
 
-  // 3 : Delete the destination
+  // 3 : Prevent deletion if any activity, food or restaurant references it
+  await assertNoLinkedContent("destination", id);
+
+  // 4 : Delete the destination
   await destination.deleteOne();
 
-  // 4 : Clean up its photo gallery images from S3
+  // 5 : Clean up its photo gallery images from S3
   if (destination.photoGallery.length > 0) {
     await deleteImagesFromS3(destination.photoGallery);
   }
 
-  // 5 : Send response
+  // 6 : Send response
   return null;
 };
 

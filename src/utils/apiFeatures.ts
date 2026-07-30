@@ -11,6 +11,12 @@ interface BaseListQuery {
 }
 
 // FUNCTION
+// Escapes every regex metacharacter so a client-supplied string is matched
+// literally rather than interpreted as a pattern.
+const escapeRegex = (value: string) =>
+  value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+// FUNCTION
 // Chainable aggregation pipeline builder for paginated list endpoints.
 // Takes a base pipeline (any resource-specific stages the service already
 // needs, e.g. ObjectId-cast reference filters) and layers generic,
@@ -57,10 +63,16 @@ class APIFeatures<T> {
   // only if a search term was submitted in the query.
   search(fields: string[]): this {
     if (this.query.search) {
+      // The search term is client-supplied, so escape every regex
+      // metacharacter before it reaches $regex. Unescaped, a term like
+      // "st.paul" would match "stXpaul", and a crafted one like "(a+)+$"
+      // would backtrack in the database until it exhausted its CPU.
+      const term = escapeRegex(this.query.search);
+
       this.pipeline.push({
         $match: {
           $or: fields.map((field) => ({
-            [field]: { $regex: this.query.search, $options: "i" },
+            [field]: { $regex: term, $options: "i" },
           })),
         },
       });
