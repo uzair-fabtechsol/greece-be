@@ -6,9 +6,15 @@ import {
 } from "@src/constants/limitConstants";
 
 enum Role {
+  SuperAdmin = "superAdmin",
   Admin = "admin",
   Traveller = "traveller",
+  Advertiser = "advertiser",
 }
+
+// The only roles a client may self-assign through public signup. Admin and
+// superAdmin are granted server-side, never taken from a request body.
+const SIGNUP_ROLES = [Role.Traveller, Role.Advertiser] as const;
 
 const userSchema = new Schema(
   {
@@ -63,5 +69,5 @@ type UserType = InferSchemaType<typeof userSchema>;
 const UserModel = models.User || model<UserType>("User", userSchema);
 
 export default UserModel;
-export { Role };
+export { Role, SIGNUP_ROLES };
 export type { UserType };

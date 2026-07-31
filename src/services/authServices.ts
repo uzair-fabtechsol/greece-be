@@ -22,7 +22,7 @@ import {
 // FUNCTION
 const signupService = async (body: SignupBody) => {
   // 1 : Extract user details from the request body
-  const { fullName, email, password } = body;
+  const { fullName, email, password, role } = body;
 
   // 2 : Check if the email is already registered
   const existingUser = await UserModel.findOne({ email });
@@ -40,6 +40,7 @@ const signupService = async (body: SignupBody) => {
     fullName,
     email,
     password: hashedPassword,
+    role,
     otp,
     otpExpiresAt,
   });
