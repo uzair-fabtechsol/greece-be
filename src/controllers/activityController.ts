@@ -19,7 +19,7 @@ import type {
 // FUNCTION
 const createActivity = catchAsync(
   async (req: Request, res: Response): Promise<void> => {
-    const body = req.body as CreateActivityBody;
+    const body = req.validatedBody as CreateActivityBody;
 
     const data = await createActivityService(body);
 
@@ -65,7 +65,7 @@ const getActivityById = catchAsync(
 const updateActivity = catchAsync(
   async (req: Request, res: Response): Promise<void> => {
     const id = req.params.id as string;
-    const body = req.body as UpdateActivityBody;
+    const body = req.validatedBody as UpdateActivityBody;
 
     const data = await updateActivityService(id, body);
 
@@ -96,7 +96,7 @@ const deleteActivity = catchAsync(
 const updateActivityFeaturedStatus = catchAsync(
   async (req: Request, res: Response): Promise<void> => {
     const id = req.params.id as string;
-    const body = req.body as UpdateFeaturedStatusBody;
+    const body = req.validatedBody as UpdateFeaturedStatusBody;
 
     const data = await updateActivityService(id, body);
 
@@ -112,7 +112,7 @@ const updateActivityFeaturedStatus = catchAsync(
 const updateActivityIndexableStatus = catchAsync(
   async (req: Request, res: Response): Promise<void> => {
     const id = req.params.id as string;
-    const body = req.body as UpdateIndexableStatusBody;
+    const body = req.validatedBody as UpdateIndexableStatusBody;
 
     const data = await updateActivityService(id, body);
 

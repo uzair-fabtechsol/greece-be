@@ -17,7 +17,7 @@ import type {
 // FUNCTION
 const createPlace = catchAsync(
   async (req: Request, res: Response): Promise<void> => {
-    const body = req.body as CreatePlaceBody;
+    const body = req.validatedBody as CreatePlaceBody;
 
     const data = await createPlaceService(body);
 
@@ -63,7 +63,7 @@ const getPlaceById = catchAsync(
 const updatePlace = catchAsync(
   async (req: Request, res: Response): Promise<void> => {
     const id = req.params.id as string;
-    const body = req.body as UpdatePlaceBody;
+    const body = req.validatedBody as UpdatePlaceBody;
 
     const data = await updatePlaceService(id, body);
 

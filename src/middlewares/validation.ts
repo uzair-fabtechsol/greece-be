@@ -23,7 +23,11 @@ const validation = (
     }
 
     if (source === "body") {
-      req.body = result.data;
+      // req.body is writable, so the validated data could be assigned back
+      // onto it. It is kept separate anyway so that all three sources land
+      // under the same validated* convention, and so req.body always means
+      // "raw, as parsed off the wire".
+      req.validatedBody = result.data as Record<string, unknown>;
     } else if (source === "query") {
       // req.query is a getter in Express 5 that re-parses req.url on every
       // access, so mutating/reassigning it does not persist. Store the

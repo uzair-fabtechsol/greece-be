@@ -11,7 +11,7 @@ import type { CreateUserBody, GetUsersQuery } from "@src/types/userTypes";
 // FUNCTION
 const createUser = catchAsync(
   async (req: Request, res: Response): Promise<void> => {
-    const body = req.body as CreateUserBody;
+    const body = req.validatedBody as CreateUserBody;
 
     const data = await createUserService(body);
 

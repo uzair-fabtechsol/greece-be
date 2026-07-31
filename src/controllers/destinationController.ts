@@ -17,7 +17,7 @@ import type {
 // FUNCTION
 const createDestination = catchAsync(
   async (req: Request, res: Response): Promise<void> => {
-    const body = req.body as CreateDestinationBody;
+    const body = req.validatedBody as CreateDestinationBody;
 
     const data = await createDestinationService(body);
 
@@ -63,7 +63,7 @@ const getDestinationById = catchAsync(
 const updateDestination = catchAsync(
   async (req: Request, res: Response): Promise<void> => {
     const id = req.params.id as string;
-    const body = req.body as UpdateDestinationBody;
+    const body = req.validatedBody as UpdateDestinationBody;
 
     const data = await updateDestinationService(id, body);
 

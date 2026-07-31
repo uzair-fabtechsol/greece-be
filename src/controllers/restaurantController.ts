@@ -19,7 +19,7 @@ import type {
 // FUNCTION
 const createRestaurant = catchAsync(
   async (req: Request, res: Response): Promise<void> => {
-    const body = req.body as CreateRestaurantBody;
+    const body = req.validatedBody as CreateRestaurantBody;
 
     const data = await createRestaurantService(body);
 
@@ -65,7 +65,7 @@ const getRestaurantById = catchAsync(
 const updateRestaurant = catchAsync(
   async (req: Request, res: Response): Promise<void> => {
     const id = req.params.id as string;
-    const body = req.body as UpdateRestaurantBody;
+    const body = req.validatedBody as UpdateRestaurantBody;
 
     const data = await updateRestaurantService(id, body);
 
@@ -96,7 +96,7 @@ const deleteRestaurant = catchAsync(
 const updateRestaurantFeaturedStatus = catchAsync(
   async (req: Request, res: Response): Promise<void> => {
     const id = req.params.id as string;
-    const body = req.body as UpdateFeaturedStatusBody;
+    const body = req.validatedBody as UpdateFeaturedStatusBody;
 
     const data = await updateRestaurantService(id, body);
 
@@ -112,7 +112,7 @@ const updateRestaurantFeaturedStatus = catchAsync(
 const updateRestaurantIndexableStatus = catchAsync(
   async (req: Request, res: Response): Promise<void> => {
     const id = req.params.id as string;
-    const body = req.body as UpdateIndexableStatusBody;
+    const body = req.validatedBody as UpdateIndexableStatusBody;
 
     const data = await updateRestaurantService(id, body);
 

@@ -19,7 +19,7 @@ import type {
 // FUNCTION
 const createFood = catchAsync(
   async (req: Request, res: Response): Promise<void> => {
-    const body = req.body as CreateFoodBody;
+    const body = req.validatedBody as CreateFoodBody;
 
     const data = await createFoodService(body);
 
@@ -65,7 +65,7 @@ const getFoodById = catchAsync(
 const updateFood = catchAsync(
   async (req: Request, res: Response): Promise<void> => {
     const id = req.params.id as string;
-    const body = req.body as UpdateFoodBody;
+    const body = req.validatedBody as UpdateFoodBody;
 
     const data = await updateFoodService(id, body);
 
@@ -96,7 +96,7 @@ const deleteFood = catchAsync(
 const updateFoodFeaturedStatus = catchAsync(
   async (req: Request, res: Response): Promise<void> => {
     const id = req.params.id as string;
-    const body = req.body as UpdateFeaturedStatusBody;
+    const body = req.validatedBody as UpdateFeaturedStatusBody;
 
     const data = await updateFoodService(id, body);
 
@@ -112,7 +112,7 @@ const updateFoodFeaturedStatus = catchAsync(
 const updateFoodIndexableStatus = catchAsync(
   async (req: Request, res: Response): Promise<void> => {
     const id = req.params.id as string;
-    const body = req.body as UpdateIndexableStatusBody;
+    const body = req.validatedBody as UpdateIndexableStatusBody;
 
     const data = await updateFoodService(id, body);
 

@@ -7,7 +7,7 @@ import type { GetPresignedUrlBody } from "@src/types/s3Types";
 // FUNCTION
 const getPresignedUrl = catchAsync(
   async (req: Request, res: Response): Promise<void> => {
-    const body = req.body as GetPresignedUrlBody;
+    const body = req.validatedBody as GetPresignedUrlBody;
 
     const data = await getPresignedUrlService(body);
 

@@ -17,7 +17,7 @@ import type {
 // FUNCTION
 const createRegion = catchAsync(
   async (req: Request, res: Response): Promise<void> => {
-    const body = req.body as CreateRegionBody;
+    const body = req.validatedBody as CreateRegionBody;
 
     const data = await createRegionService(body);
 
@@ -63,7 +63,7 @@ const getRegionById = catchAsync(
 const updateRegion = catchAsync(
   async (req: Request, res: Response): Promise<void> => {
     const id = req.params.id as string;
-    const body = req.body as UpdateRegionBody;
+    const body = req.validatedBody as UpdateRegionBody;
 
     const data = await updateRegionService(id, body);
 

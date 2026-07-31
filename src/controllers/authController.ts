@@ -27,7 +27,7 @@ import {
 // FUNCTION
 const signup = catchAsync(
   async (req: Request, res: Response): Promise<void> => {
-    const body = req.body as SignupBody;
+    const body = req.validatedBody as SignupBody;
 
     const data = await signupService(body);
 
@@ -42,7 +42,7 @@ const signup = catchAsync(
 // FUNCTION
 const verifyOtp = catchAsync(
   async (req: Request, res: Response): Promise<void> => {
-    const body = req.body as VerifyOtpBody;
+    const body = req.validatedBody as VerifyOtpBody;
 
     const data = await verifyOtpService(body);
 
@@ -57,7 +57,7 @@ const verifyOtp = catchAsync(
 // FUNCTION
 const resendOtp = catchAsync(
   async (req: Request, res: Response): Promise<void> => {
-    const body = req.body as ResendOtpBody;
+    const body = req.validatedBody as ResendOtpBody;
 
     const data = await resendOtpService(body);
 
@@ -72,7 +72,7 @@ const resendOtp = catchAsync(
 // FUNCTION
 const signin = catchAsync(
   async (req: Request, res: Response): Promise<void> => {
-    const body = req.body as SigninBody;
+    const body = req.validatedBody as SigninBody;
 
     const { user, accessToken, refreshToken } = await signinService(body);
 
