@@ -26,7 +26,7 @@ const foodRouter = Router();
 foodRouter.post(
   "/",
   protect,
-  restrictTo(Role.Admin),
+  restrictTo(Role.SuperAdmin, Role.Admin),
   validation(createFoodSchema, "body"),
   createFood,
 );
@@ -35,7 +35,7 @@ foodRouter.get("/:id", validateObjectId(), getFoodById);
 foodRouter.patch(
   "/:id",
   protect,
-  restrictTo(Role.Admin),
+  restrictTo(Role.SuperAdmin, Role.Admin),
   validateObjectId(),
   validation(updateFoodSchema, "body"),
   updateFood,
@@ -43,14 +43,14 @@ foodRouter.patch(
 foodRouter.delete(
   "/:id",
   protect,
-  restrictTo(Role.Admin),
+  restrictTo(Role.SuperAdmin, Role.Admin),
   validateObjectId(),
   deleteFood,
 );
 foodRouter.patch(
   "/:id/featured-status",
   protect,
-  restrictTo(Role.Admin),
+  restrictTo(Role.SuperAdmin, Role.Admin),
   validateObjectId(),
   validation(updateFeaturedStatusSchema, "body"),
   updateFoodFeaturedStatus,
@@ -58,7 +58,7 @@ foodRouter.patch(
 foodRouter.patch(
   "/:id/indexable-status",
   protect,
-  restrictTo(Role.Admin),
+  restrictTo(Role.SuperAdmin, Role.Admin),
   validateObjectId(),
   validation(updateIndexableStatusSchema, "body"),
   updateFoodIndexableStatus,

@@ -11,7 +11,7 @@ const s3Router = Router();
 s3Router.post(
   "/presign-url",
   protect,
-  restrictTo(Role.Admin),
+  restrictTo(Role.SuperAdmin, Role.Admin),
   validation(getPresignedUrlSchema, "body"),
   getPresignedUrl,
 );

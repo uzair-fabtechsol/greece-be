@@ -22,7 +22,7 @@ const regionRouter = Router();
 regionRouter.post(
   "/",
   protect,
-  restrictTo(Role.Admin),
+  restrictTo(Role.SuperAdmin, Role.Admin),
   validation(createRegionSchema, "body"),
   createRegion,
 );
@@ -31,7 +31,7 @@ regionRouter.get("/:id", validateObjectId(), getRegionById);
 regionRouter.patch(
   "/:id",
   protect,
-  restrictTo(Role.Admin),
+  restrictTo(Role.SuperAdmin, Role.Admin),
   validateObjectId(),
   validation(updateRegionSchema, "body"),
   updateRegion,
@@ -39,7 +39,7 @@ regionRouter.patch(
 regionRouter.delete(
   "/:id",
   protect,
-  restrictTo(Role.Admin),
+  restrictTo(Role.SuperAdmin, Role.Admin),
   validateObjectId(),
   deleteRegion,
 );

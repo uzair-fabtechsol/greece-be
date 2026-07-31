@@ -26,7 +26,7 @@ const activityRouter = Router();
 activityRouter.post(
   "/",
   protect,
-  restrictTo(Role.Admin),
+  restrictTo(Role.SuperAdmin, Role.Admin),
   validation(createActivitySchema, "body"),
   createActivity,
 );
@@ -39,7 +39,7 @@ activityRouter.get("/:id", validateObjectId(), getActivityById);
 activityRouter.patch(
   "/:id",
   protect,
-  restrictTo(Role.Admin),
+  restrictTo(Role.SuperAdmin, Role.Admin),
   validateObjectId(),
   validation(updateActivitySchema, "body"),
   updateActivity,
@@ -47,14 +47,14 @@ activityRouter.patch(
 activityRouter.delete(
   "/:id",
   protect,
-  restrictTo(Role.Admin),
+  restrictTo(Role.SuperAdmin, Role.Admin),
   validateObjectId(),
   deleteActivity,
 );
 activityRouter.patch(
   "/:id/featured-status",
   protect,
-  restrictTo(Role.Admin),
+  restrictTo(Role.SuperAdmin, Role.Admin),
   validateObjectId(),
   validation(updateFeaturedStatusSchema, "body"),
   updateActivityFeaturedStatus,
@@ -62,7 +62,7 @@ activityRouter.patch(
 activityRouter.patch(
   "/:id/indexable-status",
   protect,
-  restrictTo(Role.Admin),
+  restrictTo(Role.SuperAdmin, Role.Admin),
   validateObjectId(),
   validation(updateIndexableStatusSchema, "body"),
   updateActivityIndexableStatus,

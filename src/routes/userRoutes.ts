@@ -12,14 +12,14 @@ const userRouter = Router();
 userRouter.get(
   "/",
   protect,
-  restrictTo(Role.Admin),
+  restrictTo(Role.SuperAdmin, Role.Admin),
   validation(getUsersQuerySchema, "query"),
   getUsers,
 );
 userRouter.get(
   "/:id",
   protect,
-  restrictTo(Role.Admin),
+  restrictTo(Role.SuperAdmin, Role.Admin),
   validateObjectId(),
   getUserById,
 );

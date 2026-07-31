@@ -22,7 +22,7 @@ const destinationRouter = Router();
 destinationRouter.post(
   "/",
   protect,
-  restrictTo(Role.Admin),
+  restrictTo(Role.SuperAdmin, Role.Admin),
   validation(createDestinationSchema, "body"),
   createDestination,
 );
@@ -35,7 +35,7 @@ destinationRouter.get("/:id", validateObjectId(), getDestinationById);
 destinationRouter.patch(
   "/:id",
   protect,
-  restrictTo(Role.Admin),
+  restrictTo(Role.SuperAdmin, Role.Admin),
   validateObjectId(),
   validation(updateDestinationSchema, "body"),
   updateDestination,
@@ -43,7 +43,7 @@ destinationRouter.patch(
 destinationRouter.delete(
   "/:id",
   protect,
-  restrictTo(Role.Admin),
+  restrictTo(Role.SuperAdmin, Role.Admin),
   validateObjectId(),
   deleteDestination,
 );

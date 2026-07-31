@@ -22,7 +22,7 @@ const placeRouter = Router();
 placeRouter.post(
   "/",
   protect,
-  restrictTo(Role.Admin),
+  restrictTo(Role.SuperAdmin, Role.Admin),
   validation(createPlaceSchema, "body"),
   createPlace,
 );
@@ -31,7 +31,7 @@ placeRouter.get("/:id", validateObjectId(), getPlaceById);
 placeRouter.patch(
   "/:id",
   protect,
-  restrictTo(Role.Admin),
+  restrictTo(Role.SuperAdmin, Role.Admin),
   validateObjectId(),
   validation(updatePlaceSchema, "body"),
   updatePlace,
@@ -39,7 +39,7 @@ placeRouter.patch(
 placeRouter.delete(
   "/:id",
   protect,
-  restrictTo(Role.Admin),
+  restrictTo(Role.SuperAdmin, Role.Admin),
   validateObjectId(),
   deletePlace,
 );

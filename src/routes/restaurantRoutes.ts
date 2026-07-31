@@ -26,7 +26,7 @@ const restaurantRouter = Router();
 restaurantRouter.post(
   "/",
   protect,
-  restrictTo(Role.Admin),
+  restrictTo(Role.SuperAdmin, Role.Admin),
   validation(createRestaurantSchema, "body"),
   createRestaurant,
 );
@@ -39,7 +39,7 @@ restaurantRouter.get("/:id", validateObjectId(), getRestaurantById);
 restaurantRouter.patch(
   "/:id",
   protect,
-  restrictTo(Role.Admin),
+  restrictTo(Role.SuperAdmin, Role.Admin),
   validateObjectId(),
   validation(updateRestaurantSchema, "body"),
   updateRestaurant,
@@ -47,14 +47,14 @@ restaurantRouter.patch(
 restaurantRouter.delete(
   "/:id",
   protect,
-  restrictTo(Role.Admin),
+  restrictTo(Role.SuperAdmin, Role.Admin),
   validateObjectId(),
   deleteRestaurant,
 );
 restaurantRouter.patch(
   "/:id/featured-status",
   protect,
-  restrictTo(Role.Admin),
+  restrictTo(Role.SuperAdmin, Role.Admin),
   validateObjectId(),
   validation(updateFeaturedStatusSchema, "body"),
   updateRestaurantFeaturedStatus,
@@ -62,7 +62,7 @@ restaurantRouter.patch(
 restaurantRouter.patch(
   "/:id/indexable-status",
   protect,
-  restrictTo(Role.Admin),
+  restrictTo(Role.SuperAdmin, Role.Admin),
   validateObjectId(),
   validation(updateIndexableStatusSchema, "body"),
   updateRestaurantIndexableStatus,
