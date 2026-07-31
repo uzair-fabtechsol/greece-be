@@ -11,7 +11,6 @@ import {
 import type {
   CreateDestinationBody,
   UpdateDestinationBody,
-  UpdateFeaturedStatusBody,
   GetDestinationsQuery,
 } from "@src/types/destinationTypes";
 
@@ -91,27 +90,10 @@ const deleteDestination = catchAsync(
   },
 );
 
-// FUNCTION
-const updateDestinationFeaturedStatus = catchAsync(
-  async (req: Request, res: Response): Promise<void> => {
-    const id = req.params.id as string;
-    const body = req.body as UpdateFeaturedStatusBody;
-
-    const data = await updateDestinationService(id, body);
-
-    sendResponse(res, 200, {
-      status: "success",
-      message: "Destination featured status updated successfully",
-      data,
-    });
-  },
-);
-
 export {
   createDestination,
   getDestinations,
   getDestinationById,
   updateDestination,
   deleteDestination,
-  updateDestinationFeaturedStatus,
 };

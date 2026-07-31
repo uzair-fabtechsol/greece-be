@@ -51,14 +51,9 @@ const createDestinationSchema = z.object({
     .array(z.string().trim())
     .max(MAX_TIPS_AND_TRICKS)
     .optional(),
-  isFeatured: z.boolean().optional(),
 });
 
 const updateDestinationSchema = createDestinationSchema.partial();
-
-const updateFeaturedStatusSchema = z.object({
-  isFeatured: z.boolean(),
-});
 
 const getDestinationsQuerySchema = z.object({
   search: z.string().trim().optional(),
@@ -81,6 +76,5 @@ const getDestinationsQuerySchema = z.object({
 export {
   createDestinationSchema,
   updateDestinationSchema,
-  updateFeaturedStatusSchema,
   getDestinationsQuerySchema,
 };

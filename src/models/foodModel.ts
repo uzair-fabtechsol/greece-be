@@ -78,6 +78,8 @@ const foodSchema = new Schema(
     },
     photoGallery: {
       type: [String],
+      required: true,
+      default: [],
       validate: {
         validator: (value: string[]) =>
           value.length >= MIN_FOOD_IMAGES && value.length <= MAX_FOOD_IMAGES,

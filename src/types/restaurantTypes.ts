@@ -1,5 +1,6 @@
 interface CreateRestaurantBody {
   name: string;
+  tagLine: string;
   type: string;
   priceRange: string;
   status?: "draft" | "published" | "archived";

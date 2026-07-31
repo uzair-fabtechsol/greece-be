@@ -7,6 +7,7 @@ import {
 import {
   NAME_MIN_LENGTH,
   NAME_MAX_LENGTH,
+  TAGLINE_MAX_LENGTH,
 } from "@src/constants/limitConstants";
 
 enum RestaurantType {
@@ -48,6 +49,12 @@ const restaurantSchema = new Schema(
       lowercase: true,
       index: true,
     },
+    tagLine: {
+      type: String,
+      required: true,
+      trim: true,
+      maxlength: TAGLINE_MAX_LENGTH,
+    },
     type: {
       type: String,
       enum: Object.values(RestaurantType),
@@ -84,6 +91,8 @@ const restaurantSchema = new Schema(
     },
     photoGallery: {
       type: [String],
+      required: true,
+      default: [],
       validate: {
         validator: (value: string[]) =>
           value.length >= MIN_RESTAURANT_IMAGES &&

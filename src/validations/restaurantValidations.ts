@@ -9,6 +9,7 @@ import {
 import {
   NAME_MIN_LENGTH,
   NAME_MAX_LENGTH,
+  TAGLINE_MAX_LENGTH,
 } from "@src/constants/limitConstants";
 
 const typeEnum = z.enum([
@@ -33,6 +34,7 @@ const restaurantStatusEnum = z.enum(["draft", "published", "archived"]);
 const createRestaurantSchema = z
   .object({
     name: z.string().trim().min(NAME_MIN_LENGTH).max(NAME_MAX_LENGTH),
+    tagLine: z.string().trim().min(1).max(TAGLINE_MAX_LENGTH),
     type: typeEnum,
     priceRange: priceRangeEnum,
     status: restaurantStatusEnum.optional(),
@@ -61,6 +63,7 @@ const updateRestaurantSchema = z
       .min(NAME_MIN_LENGTH)
       .max(NAME_MAX_LENGTH)
       .optional(),
+    tagLine: z.string().trim().min(1).max(TAGLINE_MAX_LENGTH).optional(),
     type: typeEnum.optional(),
     priceRange: priceRangeEnum.optional(),
     status: restaurantStatusEnum.optional(),

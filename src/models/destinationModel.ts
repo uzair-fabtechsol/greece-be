@@ -102,6 +102,8 @@ const destinationSchema = new Schema(
     },
     photoGallery: {
       type: [String],
+      required: true,
+      default: [],
       validate: {
         validator: (value: string[]) =>
           value.length >= MIN_DESTINATION_IMAGES &&
@@ -116,10 +118,6 @@ const destinationSchema = new Schema(
         validator: (value: string[]) => value.length <= MAX_TIPS_AND_TRICKS,
         message: `At most ${MAX_TIPS_AND_TRICKS} tips and tricks are allowed`,
       },
-    },
-    isFeatured: {
-      type: Boolean,
-      default: false,
     },
   },
   {

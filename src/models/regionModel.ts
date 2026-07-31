@@ -70,6 +70,8 @@ const regionSchema = new Schema(
     },
     photoGallery: {
       type: [String],
+      required: true,
+      default: [],
       validate: {
         validator: (value: string[]) =>
           value.length >= MIN_REGION_IMAGES &&

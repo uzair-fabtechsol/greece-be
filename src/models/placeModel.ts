@@ -106,6 +106,8 @@ const placeSchema = new Schema(
     },
     photoGallery: {
       type: [String],
+      required: true,
+      default: [],
       validate: {
         validator: (value: string[]) =>
           value.length >= MIN_PLACE_IMAGES && value.length <= MAX_PLACE_IMAGES,
