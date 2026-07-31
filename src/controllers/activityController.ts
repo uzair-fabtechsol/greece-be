@@ -34,7 +34,7 @@ const createActivity = catchAsync(
 // FUNCTION
 const getActivities = catchAsync(
   async (req: Request, res: Response): Promise<void> => {
-    const query = req.validatedQuery as unknown as GetActivitiesQuery;
+    const query = req.validatedQuery as GetActivitiesQuery;
 
     const { activities, pagination } = await getActivitiesService(query);
 

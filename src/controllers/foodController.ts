@@ -34,7 +34,7 @@ const createFood = catchAsync(
 // FUNCTION
 const getFoods = catchAsync(
   async (req: Request, res: Response): Promise<void> => {
-    const query = req.validatedQuery as unknown as GetFoodsQuery;
+    const query = req.validatedQuery as GetFoodsQuery;
 
     const { foods, pagination } = await getFoodsService(query);
 

@@ -32,7 +32,7 @@ const createDestination = catchAsync(
 // FUNCTION
 const getDestinations = catchAsync(
   async (req: Request, res: Response): Promise<void> => {
-    const query = req.validatedQuery as unknown as GetDestinationsQuery;
+    const query = req.validatedQuery as GetDestinationsQuery;
 
     const { destinations, pagination } = await getDestinationsService(query);
 

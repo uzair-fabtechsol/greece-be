@@ -32,7 +32,7 @@ const createRegion = catchAsync(
 // FUNCTION
 const getRegions = catchAsync(
   async (req: Request, res: Response): Promise<void> => {
-    const query = req.validatedQuery as unknown as GetRegionsQuery;
+    const query = req.validatedQuery as GetRegionsQuery;
 
     const { regions, pagination } = await getRegionsService(query);
 

@@ -43,6 +43,8 @@ class APIFeatures<T> {
   // in the query (skips undefined, null, and empty string).
   filter(fields: string[]): this {
     const match: Record<string, unknown> = {};
+    // BaseListQuery has no index signature, so TS needs the hop through
+    // unknown before it will accept the Record assertion.
     const query = this.query as unknown as Record<string, unknown>;
 
     for (const field of fields) {
