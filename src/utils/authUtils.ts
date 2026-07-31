@@ -18,10 +18,10 @@ const generateOtp = (): string => {
 };
 
 // FUNCTION
-const buildOtpEmailHtml = (otp: string): string => {
+const sendOtpEmail = async (email: string, otp: string): Promise<void> => {
   const digits = otp.split("");
 
-  return `
+  const html = `
   <div style="background-color:#EEF3F6;padding:32px 16px;font-family:Segoe UI,Helvetica,Arial,sans-serif;">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:480px;margin:0 auto;background-color:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 4px 16px rgba(10,42,64,0.15);">
       <tr>
@@ -70,15 +70,12 @@ const buildOtpEmailHtml = (otp: string): string => {
       </tr>
     </table>
   </div>`;
-};
 
-// FUNCTION
-const sendOtpEmail = async (email: string, otp: string): Promise<void> => {
   await transporter.sendMail({
     from: env.EMAIL_FROM,
     to: email,
     subject: "Your verification code",
-    html: buildOtpEmailHtml(otp),
+    html,
   });
 };
 

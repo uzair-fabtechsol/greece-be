@@ -1,3 +1,8 @@
+import type { z } from "zod";
+import type { createUserSchema } from "@src/validations/userValidations";
+
+type CreateUserBody = z.infer<typeof createUserSchema>;
+
 interface GetUsersQuery {
   search?: string;
   projection?: string;
@@ -9,4 +14,4 @@ interface GetUsersQuery {
   isVerified?: boolean;
 }
 
-export type { GetUsersQuery };
+export type { CreateUserBody, GetUsersQuery };

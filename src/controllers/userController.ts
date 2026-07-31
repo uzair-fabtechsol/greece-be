@@ -2,10 +2,26 @@ import type { Request, Response } from "express";
 import catchAsync from "@src/utils/catchAsync";
 import sendResponse from "@src/utils/sendResponse";
 import {
+  createUserService,
   getUsersService,
   getUserByIdService,
 } from "@src/services/userServices";
-import type { GetUsersQuery } from "@src/types/userTypes";
+import type { CreateUserBody, GetUsersQuery } from "@src/types/userTypes";
+
+// FUNCTION
+const createUser = catchAsync(
+  async (req: Request, res: Response): Promise<void> => {
+    const body = req.body as CreateUserBody;
+
+    const data = await createUserService(body);
+
+    sendResponse(res, 201, {
+      status: "success",
+      message: "Admin created successfully",
+      data,
+    });
+  },
+);
 
 // FUNCTION
 const getUsers = catchAsync(
@@ -37,4 +53,4 @@ const getUserById = catchAsync(
   },
 );
 
-export { getUsers, getUserById };
+export { createUser, getUsers, getUserById };
