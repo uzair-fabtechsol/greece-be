@@ -100,6 +100,12 @@ const foodSchema = new Schema(
   },
 );
 
+foodSchema.index({ status: 1, place: 1 });
+foodSchema.index({ status: 1, destination: 1 });
+foodSchema.index({ status: 1, region: 1 });
+foodSchema.index({ status: 1, type: 1 });
+foodSchema.index({ createdAt: -1 });
+
 type FoodDocType = InferSchemaType<typeof foodSchema>;
 
 const FoodModel = models.Food || model<FoodDocType>("Food", foodSchema);

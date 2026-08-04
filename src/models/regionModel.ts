@@ -110,6 +110,10 @@ const regionSchema = new Schema(
   },
 );
 
+regionSchema.index({ status: 1, type: 1 });
+regionSchema.index({ status: 1, bestSeason: 1 });
+regionSchema.index({ createdAt: -1 });
+
 type RegionDocType = InferSchemaType<typeof regionSchema>;
 
 const RegionModel =

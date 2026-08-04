@@ -128,6 +128,10 @@ const placeSchema = new Schema(
   },
 );
 
+placeSchema.index({ status: 1, destination: 1 });
+placeSchema.index({ status: 1, type: 1 });
+placeSchema.index({ createdAt: -1 });
+
 type PlaceDocType = InferSchemaType<typeof placeSchema>;
 
 const PlaceModel = models.Place || model<PlaceDocType>("Place", placeSchema);

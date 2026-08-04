@@ -114,6 +114,12 @@ const restaurantSchema = new Schema(
   },
 );
 
+restaurantSchema.index({ status: 1, place: 1 });
+restaurantSchema.index({ status: 1, destination: 1 });
+restaurantSchema.index({ status: 1, region: 1 });
+restaurantSchema.index({ status: 1, type: 1 });
+restaurantSchema.index({ createdAt: -1 });
+
 type RestaurantDocType = InferSchemaType<typeof restaurantSchema>;
 
 const RestaurantModel =

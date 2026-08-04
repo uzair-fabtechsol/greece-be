@@ -142,6 +142,12 @@ const activitySchema = new Schema(
   },
 );
 
+activitySchema.index({ status: 1, place: 1 });
+activitySchema.index({ status: 1, destination: 1 });
+activitySchema.index({ status: 1, region: 1 });
+activitySchema.index({ status: 1, type: 1 });
+activitySchema.index({ createdAt: -1 });
+
 type ActivityDocType = InferSchemaType<typeof activitySchema>;
 
 const ActivityModel =

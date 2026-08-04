@@ -64,6 +64,9 @@ const userSchema = new Schema(
   },
 );
 
+userSchema.index({ role: 1, isVerified: 1 });
+userSchema.index({ createdAt: -1 });
+
 type UserType = InferSchemaType<typeof userSchema>;
 
 const UserModel = models.User || model<UserType>("User", userSchema);

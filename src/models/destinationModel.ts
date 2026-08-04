@@ -125,6 +125,11 @@ const destinationSchema = new Schema(
   },
 );
 
+destinationSchema.index({ status: 1, region: 1 });
+destinationSchema.index({ status: 1, type: 1 });
+destinationSchema.index({ status: 1, "quickFacts.bestSeason": 1 });
+destinationSchema.index({ createdAt: -1 });
+
 type DestinationDocType = InferSchemaType<typeof destinationSchema>;
 
 const DestinationModel =
