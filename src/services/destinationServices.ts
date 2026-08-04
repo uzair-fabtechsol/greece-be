@@ -47,29 +47,28 @@ const createDestinationService = async (body: CreateDestinationBody) => {
 
 // FUNCTION
 const getDestinationsService = async (query: GetDestinationsQuery) => {
-  // 1 : Region needs ObjectId casting and quickFacts.bestSeason is nested,
-  // so normalize those onto the query before handing it to APIFeatures
+  // 1 : Region needs ObjectId casting against the raw field (so filter/search/sort
+  // stay index-eligible before the region lookup joins anything), and
+  // quickFacts.bestSeason is nested, so normalize those onto the query
+  // before handing it to APIFeatures
   const filterQuery = {
     ...query,
-    "regionDetails._id": query.region
-      ? new Types.ObjectId(query.region)
-      : undefined,
+    region: query.region ? new Types.ObjectId(query.region) : undefined,
     "quickFacts.bestSeason": query.bestSeason,
   };
 
-  // 2 : Resource-specific stage: join the referenced region onto each result
-  const basePipeline: PipelineStage[] = [...regionLookupStages];
-
-  // 3 : Build and run the aggregation pipeline to get the page of results
-  // and the total count in one round trip
+  // 2 : Build and run the aggregation pipeline to get the page of results
+  // and the total count in one round trip. The region lookup is added via
+  // .addStages() after filter/search/sort so those stages stay index-eligible.
   const { data: destinations, pagination } = await new APIFeatures(
     DestinationModel,
     filterQuery,
-    basePipeline,
+    [],
   )
-    .filter(["status", "type", "quickFacts.bestSeason", "regionDetails._id"])
+    .filter(["status", "type", "quickFacts.bestSeason", "region"])
     .search(["name"])
     .sort()
+    .addStages(regionLookupStages)
     .projection()
     .paginate()
     .exec();

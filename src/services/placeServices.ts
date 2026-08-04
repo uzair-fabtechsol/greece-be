@@ -46,27 +46,28 @@ const createPlaceService = async (body: CreatePlaceBody) => {
 
 // FUNCTION
 const getPlacesService = async (query: GetPlacesQuery) => {
-  // 1 : Destination needs ObjectId casting before it can be matched
+  // 1 : Destination needs ObjectId casting before it can be matched against
+  // the raw field, so the filter/search/sort stages can use an index on
+  // Place before the destination lookup joins anything
   const filterQuery = {
     ...query,
-    "destinationDetails._id": query.destination
+    destination: query.destination
       ? new Types.ObjectId(query.destination)
       : undefined,
   };
 
-  // 2 : Resource-specific stage: join the referenced destination onto each result
-  const basePipeline: PipelineStage[] = [...destinationLookupStages];
-
-  // 3 : Build and run the aggregation pipeline to get the page of results
-  // and the total count in one round trip
+  // 2 : Build and run the aggregation pipeline to get the page of results
+  // and the total count in one round trip. The destination lookup is added
+  // via .addStages() after filter/search/sort so those stages stay index-eligible.
   const { data: places, pagination } = await new APIFeatures(
     PlaceModel,
     filterQuery,
-    basePipeline,
+    [],
   )
-    .filter(["status", "type", "destinationDetails._id"])
+    .filter(["status", "type", "destination"])
     .search(["name"])
     .sort()
+    .addStages(destinationLookupStages)
     .projection()
     .paginate()
     .exec();
