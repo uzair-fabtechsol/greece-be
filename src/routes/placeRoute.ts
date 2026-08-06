@@ -15,7 +15,7 @@ import {
   createPlaceSchema,
   updatePlaceSchema,
   getPlacesQuerySchema,
-} from "@src/validations/placeValidations";
+} from "@src/validations/placeValidation";
 
 const placeRouter = Router();
 

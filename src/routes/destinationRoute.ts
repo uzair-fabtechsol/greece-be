@@ -15,7 +15,7 @@ import {
   createDestinationSchema,
   updateDestinationSchema,
   getDestinationsQuerySchema,
-} from "@src/validations/destinationValidations";
+} from "@src/validations/destinationValidation";
 
 const destinationRouter = Router();
 

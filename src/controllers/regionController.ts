@@ -7,12 +7,12 @@ import {
   getRegionByIdService,
   updateRegionService,
   deleteRegionService,
-} from "@src/services/regionServices";
+} from "@src/services/regionService";
 import type {
   CreateRegionBody,
   UpdateRegionBody,
   GetRegionsQuery,
-} from "@src/types/regionTypes";
+} from "@src/types/regionType";
 
 // FUNCTION
 const createRegion = catchAsync(

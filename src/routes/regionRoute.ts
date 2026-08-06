@@ -15,7 +15,7 @@ import {
   createRegionSchema,
   updateRegionSchema,
   getRegionsQuerySchema,
-} from "@src/validations/regionValidations";
+} from "@src/validations/regionValidation";
 
 const regionRouter = Router();
 

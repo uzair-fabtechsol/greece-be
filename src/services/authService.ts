@@ -4,13 +4,13 @@ import AppError from "@src/utils/appError";
 import {
   BCRYPT_SALT_ROUNDS,
   OTP_EXPIRY_MINUTES,
-} from "@src/constants/authConstants";
+} from "@src/constants/authConstant";
 import type {
   SignupBody,
   VerifyOtpBody,
   ResendOtpBody,
   SigninBody,
-} from "@src/types/authTypes";
+} from "@src/types/authType";
 import {
   generateOtp,
   sendOtpEmail,

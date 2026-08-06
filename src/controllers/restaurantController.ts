@@ -7,14 +7,14 @@ import {
   getRestaurantByIdService,
   updateRestaurantService,
   deleteRestaurantService,
-} from "@src/services/restaurantServices";
+} from "@src/services/restaurantService";
 import type {
   CreateRestaurantBody,
   UpdateRestaurantBody,
   UpdateFeaturedStatusBody,
   UpdateIndexableStatusBody,
   GetRestaurantsQuery,
-} from "@src/types/restaurantTypes";
+} from "@src/types/restaurantType";
 
 // FUNCTION
 const createRestaurant = catchAsync(

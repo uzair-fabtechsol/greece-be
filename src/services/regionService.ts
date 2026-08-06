@@ -1,7 +1,7 @@
 import type { PipelineStage } from "mongoose";
 import RegionModel from "@src/models/regionModel";
 import DestinationModel from "@src/models/destinationModel";
-import { deleteImagesFromS3 } from "@src/services/s3Services";
+import { deleteImagesFromS3 } from "@src/services/s3Service";
 import AppError from "@src/utils/appError";
 import { assertNoLinkedContent } from "@src/utils/deleteGuards";
 import { generateUniqueSlug } from "@src/utils/slug";
@@ -10,7 +10,7 @@ import type {
   CreateRegionBody,
   UpdateRegionBody,
   GetRegionsQuery,
-} from "@src/types/regionTypes";
+} from "@src/types/regionType";
 
 // FUNCTION
 const createRegionService = async (body: CreateRegionBody) => {

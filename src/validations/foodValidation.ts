@@ -5,12 +5,12 @@ import {
   DEFAULT_FOODS_LIMIT,
   MAX_FOODS_LIMIT,
   FOOD_SORT_FIELDS,
-} from "@src/constants/foodConstants";
+} from "@src/constants/foodConstant";
 import {
   NAME_MIN_LENGTH,
   NAME_MAX_LENGTH,
   TAGLINE_MAX_LENGTH,
-} from "@src/constants/limitConstants";
+} from "@src/constants/limitConstant";
 
 const typeEnum = z.enum([
   "localDish",

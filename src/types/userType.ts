@@ -1,5 +1,5 @@
 import type { z } from "zod";
-import type { createUserSchema } from "@src/validations/userValidations";
+import type { createUserSchema } from "@src/validations/userValidation";
 
 type CreateUserBody = z.infer<typeof createUserSchema>;
 

@@ -19,7 +19,7 @@ import {
   updateFeaturedStatusSchema,
   updateIndexableStatusSchema,
   getRestaurantsQuerySchema,
-} from "@src/validations/restaurantValidations";
+} from "@src/validations/restaurantValidation";
 
 const restaurantRouter = Router();
 

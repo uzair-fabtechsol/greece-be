@@ -1,15 +1,15 @@
 import { model, models, Schema, type InferSchemaType } from "mongoose";
-import { Season, Status } from "@src/constants/enumConstants";
+import { Season, Status } from "@src/constants/enumConstant";
 import {
   MIN_REGION_IMAGES,
   MAX_REGION_IMAGES,
   MAX_TIPS_AND_TRICKS,
-} from "@src/constants/regionConstants";
+} from "@src/constants/regionConstant";
 import {
   NAME_MIN_LENGTH,
   NAME_MAX_LENGTH,
   TAGLINE_MAX_LENGTH,
-} from "@src/constants/limitConstants";
+} from "@src/constants/limitConstant";
 
 enum RegionType {
   Island = "island",

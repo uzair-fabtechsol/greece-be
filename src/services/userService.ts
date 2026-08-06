@@ -4,9 +4,9 @@ import UserModel from "@src/models/userModel";
 import AppError from "@src/utils/appError";
 import APIFeatures from "@src/utils/apiFeatures";
 import { sendAdminCredentialsEmail } from "@src/utils/userUtils";
-import { BCRYPT_SALT_ROUNDS } from "@src/constants/authConstants";
-import { USER_PRIVATE_FIELDS } from "@src/constants/userConstants";
-import type { CreateUserBody, GetUsersQuery } from "@src/types/userTypes";
+import { BCRYPT_SALT_ROUNDS } from "@src/constants/authConstant";
+import { USER_PRIVATE_FIELDS } from "@src/constants/userConstant";
+import type { CreateUserBody, GetUsersQuery } from "@src/types/userType";
 
 // FUNCTION
 const createUserService = async (body: CreateUserBody) => {

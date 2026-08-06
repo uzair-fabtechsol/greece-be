@@ -2,7 +2,7 @@ import { Types, type PipelineStage } from "mongoose";
 import DestinationModel from "@src/models/destinationModel";
 import RegionModel from "@src/models/regionModel";
 import PlaceModel from "@src/models/placeModel";
-import { deleteImagesFromS3 } from "@src/services/s3Services";
+import { deleteImagesFromS3 } from "@src/services/s3Service";
 import AppError from "@src/utils/appError";
 import { assertNoLinkedContent } from "@src/utils/deleteGuards";
 import { generateUniqueSlug } from "@src/utils/slug";
@@ -11,7 +11,7 @@ import type {
   CreateDestinationBody,
   UpdateDestinationBody,
   GetDestinationsQuery,
-} from "@src/types/destinationTypes";
+} from "@src/types/destinationType";
 
 const regionLookupStages: PipelineStage.FacetPipelineStage[] = [
   {

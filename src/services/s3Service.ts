@@ -3,8 +3,8 @@ import { PutObjectCommand, DeleteObjectsCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { s3Client } from "@src/config/s3";
 import { env } from "@src/config/env";
-import { PRESIGNED_URL_EXPIRY_SECONDS } from "@src/constants/s3Constants";
-import type { GetPresignedUrlBody } from "@src/types/s3Types";
+import { PRESIGNED_URL_EXPIRY_SECONDS } from "@src/constants/s3Constant";
+import type { GetPresignedUrlBody } from "@src/types/s3Type";
 
 // FUNCTION
 const extractS3KeyFromUrl = (url: string): string => {

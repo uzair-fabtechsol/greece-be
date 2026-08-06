@@ -12,7 +12,7 @@ import { Role } from "@src/models/userModel";
 import {
   createUserSchema,
   getUsersQuerySchema,
-} from "@src/validations/userValidations";
+} from "@src/validations/userValidation";
 
 const userRouter = Router();
 

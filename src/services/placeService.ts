@@ -1,7 +1,7 @@
 import { Types, type PipelineStage } from "mongoose";
 import PlaceModel from "@src/models/placeModel";
 import DestinationModel from "@src/models/destinationModel";
-import { deleteImagesFromS3 } from "@src/services/s3Services";
+import { deleteImagesFromS3 } from "@src/services/s3Service";
 import AppError from "@src/utils/appError";
 import { assertNoLinkedContent } from "@src/utils/deleteGuards";
 import { generateUniqueSlug } from "@src/utils/slug";
@@ -10,7 +10,7 @@ import type {
   CreatePlaceBody,
   UpdatePlaceBody,
   GetPlacesQuery,
-} from "@src/types/placeTypes";
+} from "@src/types/placeType";
 
 const destinationLookupStages: PipelineStage.FacetPipelineStage[] = [
   {

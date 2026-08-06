@@ -1,14 +1,14 @@
 import { model, models, Schema, type InferSchemaType } from "mongoose";
-import { Status } from "@src/constants/enumConstants";
+import { Status } from "@src/constants/enumConstant";
 import {
   MIN_RESTAURANT_IMAGES,
   MAX_RESTAURANT_IMAGES,
-} from "@src/constants/restaurantConstants";
+} from "@src/constants/restaurantConstant";
 import {
   NAME_MIN_LENGTH,
   NAME_MAX_LENGTH,
   TAGLINE_MAX_LENGTH,
-} from "@src/constants/limitConstants";
+} from "@src/constants/limitConstant";
 
 enum RestaurantType {
   FineDining = "fineDining",

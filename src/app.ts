@@ -9,15 +9,15 @@ import hpp from "hpp";
 import AppError from "@src/utils/appError";
 import globalErrorHandler from "@src/controllers/errorController";
 import sendResponse from "@src/utils/sendResponse";
-import authRouter from "@src/routes/authRoutes";
-import userRouter from "@src/routes/userRoutes";
-import regionRouter from "@src/routes/regionRoutes";
-import destinationRouter from "@src/routes/destinationRoutes";
-import placeRouter from "@src/routes/placeRoutes";
-import activityRouter from "@src/routes/activityRoutes";
-import foodRouter from "@src/routes/foodRoutes";
-import restaurantRouter from "@src/routes/restaurantRoutes";
-import s3Router from "@src/routes/s3Routes";
+import authRouter from "@src/routes/authRoute";
+import userRouter from "@src/routes/userRoute";
+import regionRouter from "@src/routes/regionRoute";
+import destinationRouter from "@src/routes/destinationRoute";
+import placeRouter from "@src/routes/placeRoute";
+import activityRouter from "@src/routes/activityRoute";
+import foodRouter from "@src/routes/foodRoute";
+import restaurantRouter from "@src/routes/restaurantRoute";
+import s3Router from "@src/routes/s3Route";
 
 // ─── Process-level Safety Nets ────────────────────────────────────────────────
 

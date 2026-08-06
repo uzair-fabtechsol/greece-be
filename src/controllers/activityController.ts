@@ -7,14 +7,14 @@ import {
   getActivityByIdService,
   updateActivityService,
   deleteActivityService,
-} from "@src/services/activityServices";
+} from "@src/services/activityService";
 import type {
   CreateActivityBody,
   UpdateActivityBody,
   UpdateFeaturedStatusBody,
   UpdateIndexableStatusBody,
   GetActivitiesQuery,
-} from "@src/types/activityTypes";
+} from "@src/types/activityType";
 
 // FUNCTION
 const createActivity = catchAsync(

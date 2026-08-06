@@ -1,9 +1,9 @@
 import { z } from "zod";
-import { OTP_LENGTH, PASSWORD_MIN_LENGTH } from "@src/constants/authConstants";
+import { OTP_LENGTH, PASSWORD_MIN_LENGTH } from "@src/constants/authConstant";
 import {
   NAME_MIN_LENGTH,
   NAME_MAX_LENGTH,
-} from "@src/constants/limitConstants";
+} from "@src/constants/limitConstant";
 import { SIGNUP_ROLES } from "@src/models/userModel";
 
 const signupSchema = z.object({

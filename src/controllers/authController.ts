@@ -8,13 +8,13 @@ import {
   signinService,
   rotateTokenService,
   getMeService,
-} from "@src/services/authServices";
+} from "@src/services/authService";
 import type {
   SignupBody,
   VerifyOtpBody,
   ResendOtpBody,
   SigninBody,
-} from "@src/types/authTypes";
+} from "@src/types/authType";
 import {
   getAccessTokenCookieOptions,
   getRefreshTokenCookieOptions,
@@ -22,7 +22,7 @@ import {
 import {
   ACCESS_TOKEN_COOKIE_NAME,
   REFRESH_TOKEN_COOKIE_NAME,
-} from "@src/constants/authConstants";
+} from "@src/constants/authConstant";
 
 // FUNCTION
 const signup = catchAsync(

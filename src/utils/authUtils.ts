@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import ms from "ms";
 import type { CookieOptions } from "express";
-import { OTP_LENGTH, OTP_EXPIRY_MINUTES } from "@src/constants/authConstants";
+import { OTP_LENGTH, OTP_EXPIRY_MINUTES } from "@src/constants/authConstant";
 import transporter from "@src/config/mailer";
 import { env } from "@src/config/env";
 

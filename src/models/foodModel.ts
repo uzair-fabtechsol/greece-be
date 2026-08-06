@@ -1,14 +1,14 @@
 import { model, models, Schema, type InferSchemaType } from "mongoose";
-import { Status } from "@src/constants/enumConstants";
+import { Status } from "@src/constants/enumConstant";
 import {
   MIN_FOOD_IMAGES,
   MAX_FOOD_IMAGES,
-} from "@src/constants/foodConstants";
+} from "@src/constants/foodConstant";
 import {
   NAME_MIN_LENGTH,
   NAME_MAX_LENGTH,
   TAGLINE_MAX_LENGTH,
-} from "@src/constants/limitConstants";
+} from "@src/constants/limitConstant";
 
 enum FoodType {
   LocalDish = "localDish",

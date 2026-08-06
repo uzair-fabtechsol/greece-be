@@ -5,12 +5,12 @@ import {
   DEFAULT_RESTAURANTS_LIMIT,
   MAX_RESTAURANTS_LIMIT,
   RESTAURANT_SORT_FIELDS,
-} from "@src/constants/restaurantConstants";
+} from "@src/constants/restaurantConstant";
 import {
   NAME_MIN_LENGTH,
   NAME_MAX_LENGTH,
   TAGLINE_MAX_LENGTH,
-} from "@src/constants/limitConstants";
+} from "@src/constants/limitConstant";
 
 const typeEnum = z.enum([
   "fineDining",

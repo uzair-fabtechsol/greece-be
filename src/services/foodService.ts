@@ -1,6 +1,6 @@
 import { Types, type PipelineStage } from "mongoose";
 import FoodModel from "@src/models/foodModel";
-import { deleteImagesFromS3 } from "@src/services/s3Services";
+import { deleteImagesFromS3 } from "@src/services/s3Service";
 import AppError from "@src/utils/appError";
 import { generateUniqueSlug } from "@src/utils/slug";
 import { resolveReference } from "@src/utils/resolveReference";
@@ -9,7 +9,7 @@ import type {
   CreateFoodBody,
   UpdateFoodBody,
   GetFoodsQuery,
-} from "@src/types/foodTypes";
+} from "@src/types/foodType";
 
 // FUNCTION
 const createFoodService = async (body: CreateFoodBody) => {

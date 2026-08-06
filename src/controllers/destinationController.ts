@@ -7,12 +7,12 @@ import {
   getDestinationByIdService,
   updateDestinationService,
   deleteDestinationService,
-} from "@src/services/destinationServices";
+} from "@src/services/destinationService";
 import type {
   CreateDestinationBody,
   UpdateDestinationBody,
   GetDestinationsQuery,
-} from "@src/types/destinationTypes";
+} from "@src/types/destinationType";
 
 // FUNCTION
 const createDestination = catchAsync(

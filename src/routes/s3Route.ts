@@ -4,7 +4,7 @@ import validation from "@src/middlewares/validation";
 import { protect } from "@src/middlewares/protect";
 import { restrictTo } from "@src/middlewares/restrictTo";
 import { Role } from "@src/models/userModel";
-import { getPresignedUrlSchema } from "@src/validations/s3Validations";
+import { getPresignedUrlSchema } from "@src/validations/s3Validation";
 
 const s3Router = Router();
 

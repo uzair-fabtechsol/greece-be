@@ -4,7 +4,7 @@ import type {
   verifyOtpSchema,
   resendOtpSchema,
   signinSchema,
-} from "@src/validations/authValidations";
+} from "@src/validations/authValidation";
 
 type SignupBody = z.infer<typeof signupSchema>;
 type VerifyOtpBody = z.infer<typeof verifyOtpSchema>;

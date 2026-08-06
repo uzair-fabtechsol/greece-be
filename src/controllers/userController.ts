@@ -5,8 +5,8 @@ import {
   createUserService,
   getUsersService,
   getUserByIdService,
-} from "@src/services/userServices";
-import type { CreateUserBody, GetUsersQuery } from "@src/types/userTypes";
+} from "@src/services/userService";
+import type { CreateUserBody, GetUsersQuery } from "@src/types/userType";
 
 // FUNCTION
 const createUser = catchAsync(

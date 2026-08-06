@@ -1,15 +1,15 @@
 import { z } from "zod";
-import { PASSWORD_MIN_LENGTH } from "@src/constants/authConstants";
+import { PASSWORD_MIN_LENGTH } from "@src/constants/authConstant";
 import {
   NAME_MIN_LENGTH,
   NAME_MAX_LENGTH,
-} from "@src/constants/limitConstants";
+} from "@src/constants/limitConstant";
 import {
   DEFAULT_USERS_PAGE,
   DEFAULT_USERS_LIMIT,
   MAX_USERS_LIMIT,
   USER_SORT_FIELDS,
-} from "@src/constants/userConstants";
+} from "@src/constants/userConstant";
 import { Role } from "@src/models/userModel";
 
 const roleEnum = z.enum(Object.values(Role) as [string, ...string[]]);

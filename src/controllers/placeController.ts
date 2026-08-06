@@ -7,12 +7,12 @@ import {
   getPlaceByIdService,
   updatePlaceService,
   deletePlaceService,
-} from "@src/services/placeServices";
+} from "@src/services/placeService";
 import type {
   CreatePlaceBody,
   UpdatePlaceBody,
   GetPlacesQuery,
-} from "@src/types/placeTypes";
+} from "@src/types/placeType";
 
 // FUNCTION
 const createPlace = catchAsync(

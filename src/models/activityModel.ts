@@ -1,5 +1,5 @@
 import { model, models, Schema, type InferSchemaType } from "mongoose";
-import { Status } from "@src/constants/enumConstants";
+import { Status } from "@src/constants/enumConstant";
 import {
   MIN_ACTIVITY_IMAGES,
   MAX_ACTIVITY_IMAGES,
@@ -7,12 +7,12 @@ import {
   MAX_WHATS_INCLUDED,
   MAX_WHAT_TO_EXPECT,
   MAX_GOOD_TO_KNOW,
-} from "@src/constants/activityConstants";
+} from "@src/constants/activityConstant";
 import {
   NAME_MIN_LENGTH,
   NAME_MAX_LENGTH,
   TAGLINE_MAX_LENGTH,
-} from "@src/constants/limitConstants";
+} from "@src/constants/limitConstant";
 
 enum ActivityType {
   Boating = "boating",

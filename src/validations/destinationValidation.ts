@@ -6,12 +6,12 @@ import {
   MAX_DESTINATIONS_LIMIT,
   DESTINATION_SORT_FIELDS,
   MAX_TIPS_AND_TRICKS,
-} from "@src/constants/destinationConstants";
+} from "@src/constants/destinationConstant";
 import {
   NAME_MIN_LENGTH,
   NAME_MAX_LENGTH,
   TAGLINE_MAX_LENGTH,
-} from "@src/constants/limitConstants";
+} from "@src/constants/limitConstant";
 
 const destinationTypeEnum = z.enum([
   "island",

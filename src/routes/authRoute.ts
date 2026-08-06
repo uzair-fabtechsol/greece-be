@@ -14,7 +14,7 @@ import {
   verifyOtpSchema,
   resendOtpSchema,
   signinSchema,
-} from "@src/validations/authValidations";
+} from "@src/validations/authValidation";
 
 const authRouter = Router();
 

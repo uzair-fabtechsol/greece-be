@@ -8,12 +8,12 @@ import {
   DEFAULT_PLACES_LIMIT,
   MAX_PLACES_LIMIT,
   PLACE_SORT_FIELDS,
-} from "@src/constants/placeConstants";
+} from "@src/constants/placeConstant";
 import {
   NAME_MIN_LENGTH,
   NAME_MAX_LENGTH,
   TAGLINE_MAX_LENGTH,
-} from "@src/constants/limitConstants";
+} from "@src/constants/limitConstant";
 
 const typeEnum = z.enum([
   "beach",

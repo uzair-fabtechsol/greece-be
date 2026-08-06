@@ -1,7 +1,7 @@
 import type { NextFunction, Request, Response } from "express";
 import AppError from "@src/utils/appError";
 import { verifyAccessToken } from "@src/utils/authUtils";
-import { ACCESS_TOKEN_COOKIE_NAME } from "@src/constants/authConstants";
+import { ACCESS_TOKEN_COOKIE_NAME } from "@src/constants/authConstant";
 
 // FUNCTION
 const protect = (req: Request, _res: Response, next: NextFunction): void => {

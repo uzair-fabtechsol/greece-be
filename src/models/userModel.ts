@@ -1,9 +1,9 @@
 import { model, models, Schema, type InferSchemaType } from "mongoose";
-import { OTP_LENGTH, PASSWORD_MIN_LENGTH } from "@src/constants/authConstants";
+import { OTP_LENGTH, PASSWORD_MIN_LENGTH } from "@src/constants/authConstant";
 import {
   NAME_MIN_LENGTH,
   NAME_MAX_LENGTH,
-} from "@src/constants/limitConstants";
+} from "@src/constants/limitConstant";
 
 enum Role {
   SuperAdmin = "superAdmin",

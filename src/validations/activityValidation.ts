@@ -9,12 +9,12 @@ import {
   DEFAULT_ACTIVITIES_LIMIT,
   MAX_ACTIVITIES_LIMIT,
   ACTIVITY_SORT_FIELDS,
-} from "@src/constants/activityConstants";
+} from "@src/constants/activityConstant";
 import {
   NAME_MIN_LENGTH,
   NAME_MAX_LENGTH,
   TAGLINE_MAX_LENGTH,
-} from "@src/constants/limitConstants";
+} from "@src/constants/limitConstant";
 
 const typeEnum = z.enum([
   "boating",

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { S3Folder, ALLOWED_IMAGE_MIME_TYPES } from "@src/constants/s3Constants";
+import { S3Folder, ALLOWED_IMAGE_MIME_TYPES } from "@src/constants/s3Constant";
 
 const getPresignedUrlSchema = z.object({
   folder: z.enum(S3Folder),

@@ -6,12 +6,12 @@ import {
   DEFAULT_REGIONS_LIMIT,
   MAX_REGIONS_LIMIT,
   REGION_SORT_FIELDS,
-} from "@src/constants/regionConstants";
+} from "@src/constants/regionConstant";
 import {
   NAME_MIN_LENGTH,
   NAME_MAX_LENGTH,
   TAGLINE_MAX_LENGTH,
-} from "@src/constants/limitConstants";
+} from "@src/constants/limitConstant";
 
 const typeEnum = z.enum([
   "island",

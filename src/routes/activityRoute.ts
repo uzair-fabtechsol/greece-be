@@ -19,7 +19,7 @@ import {
   updateFeaturedStatusSchema,
   updateIndexableStatusSchema,
   getActivitiesQuerySchema,
-} from "@src/validations/activityValidations";
+} from "@src/validations/activityValidation";
 
 const activityRouter = Router();
 

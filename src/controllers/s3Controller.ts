@@ -1,8 +1,8 @@
 import type { Request, Response } from "express";
 import catchAsync from "@src/utils/catchAsync";
 import sendResponse from "@src/utils/sendResponse";
-import { getPresignedUrlService } from "@src/services/s3Services";
-import type { GetPresignedUrlBody } from "@src/types/s3Types";
+import { getPresignedUrlService } from "@src/services/s3Service";
+import type { GetPresignedUrlBody } from "@src/types/s3Type";
 
 // FUNCTION
 const getPresignedUrl = catchAsync(
