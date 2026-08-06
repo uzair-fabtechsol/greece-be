@@ -88,24 +88,34 @@ const updateIndexableStatusSchema = z.object({
   isIndexable: z.boolean(),
 });
 
-const getFoodsQuerySchema = z.object({
-  search: z.string().trim().optional(),
-  projection: z.string().trim().optional(),
-  page: z.coerce.number().int().min(1).default(DEFAULT_FOODS_PAGE),
-  limit: z.coerce
-    .number()
-    .int()
-    .min(1)
-    .max(MAX_FOODS_LIMIT)
-    .default(DEFAULT_FOODS_LIMIT),
-  sortBy: z.enum(FOOD_SORT_FIELDS).default("createdAt"),
-  sortOrder: z.enum(["asc", "desc"]).default("desc"),
-  type: typeEnum.optional(),
-  status: foodStatusEnum.optional(),
-  region: csvQueryParam(z.string().trim().min(1)),
-  destination: csvQueryParam(z.string().trim().min(1)),
-  place: csvQueryParam(z.string().trim().min(1)),
-});
+const getFoodsQuerySchema = z
+  .object({
+    search: z.string().trim().optional(),
+    projection: z.string().trim().optional(),
+    page: z.coerce.number().int().min(1).default(DEFAULT_FOODS_PAGE),
+    limit: z.coerce
+      .number()
+      .int()
+      .min(1)
+      .max(MAX_FOODS_LIMIT)
+      .default(DEFAULT_FOODS_LIMIT),
+    sortBy: z.enum(FOOD_SORT_FIELDS).default("createdAt"),
+    sortOrder: z.enum(["asc", "desc"]).default("desc"),
+    type: typeEnum.optional(),
+    status: foodStatusEnum.optional(),
+    region: csvQueryParam(z.string().trim().min(1)),
+    destination: csvQueryParam(z.string().trim().min(1)),
+    place: csvQueryParam(z.string().trim().min(1)),
+  })
+  .refine(
+    (data) =>
+      [data.region, data.destination, data.place].filter(Boolean).length <=
+      1,
+    {
+      message: "Submit at most one of region, destination, or place",
+      path: ["region"],
+    },
+  );
 
 export {
   createFoodSchema,
