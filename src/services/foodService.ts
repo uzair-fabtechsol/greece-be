@@ -35,11 +35,11 @@ const getFoodsService = async (query: GetFoodsQuery) => {
   // 1 : The three reference filters need ObjectId casting before they can be matched
   const filterQuery = {
     ...query,
-    region: query.region ? new Types.ObjectId(query.region) : undefined,
-    destination: query.destination
-      ? new Types.ObjectId(query.destination)
-      : undefined,
-    place: query.place ? new Types.ObjectId(query.place) : undefined,
+    region: query.region?.map((region) => new Types.ObjectId(region)),
+    destination: query.destination?.map(
+      (destination) => new Types.ObjectId(destination),
+    ),
+    place: query.place?.map((place) => new Types.ObjectId(place)),
   };
 
   // 2 : Foods carry no joined references, so there are no base stages

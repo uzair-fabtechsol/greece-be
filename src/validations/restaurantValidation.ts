@@ -11,6 +11,7 @@ import {
   NAME_MAX_LENGTH,
   TAGLINE_MAX_LENGTH,
 } from "@src/constants/limitConstant";
+import { csvQueryParam } from "@src/utils/csvQueryParam";
 
 const typeEnum = z.enum([
   "fineDining",
@@ -107,9 +108,9 @@ const getRestaurantsQuerySchema = z.object({
   type: typeEnum.optional(),
   priceRange: priceRangeEnum.optional(),
   status: restaurantStatusEnum.optional(),
-  region: z.string().trim().optional(),
-  destination: z.string().trim().optional(),
-  place: z.string().trim().optional(),
+  region: csvQueryParam(z.string().trim().min(1)),
+  destination: csvQueryParam(z.string().trim().min(1)),
+  place: csvQueryParam(z.string().trim().min(1)),
 });
 
 export {

@@ -33,9 +33,9 @@ interface GetRestaurantsQuery {
   type?: string;
   priceRange?: string;
   status?: string;
-  region?: string;
-  destination?: string;
-  place?: string;
+  region?: string[];
+  destination?: string[];
+  place?: string[];
 }
 
 export type {

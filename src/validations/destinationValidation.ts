@@ -12,6 +12,7 @@ import {
   NAME_MAX_LENGTH,
   TAGLINE_MAX_LENGTH,
 } from "@src/constants/limitConstant";
+import { csvQueryParam } from "@src/utils/csvQueryParam";
 
 const destinationTypeEnum = z.enum([
   "island",
@@ -70,19 +71,7 @@ const getDestinationsQuerySchema = z.object({
   type: destinationTypeEnum.optional(),
   status: destinationStatusEnum.optional(),
   bestSeason: seasonEnum.optional(),
-  // Comma-separated list of region ids (e.g. "id1,id2") so a single filter
-  // can express multiple regions, not just one.
-  region: z
-    .string()
-    .trim()
-    .transform((value) =>
-      value
-        .split(",")
-        .map((region) => region.trim())
-        .filter(Boolean),
-    )
-    .pipe(z.array(z.string().trim().min(1)).min(1))
-    .optional(),
+  region: csvQueryParam(z.string().trim().min(1)),
 });
 
 export {

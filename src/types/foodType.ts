@@ -31,9 +31,9 @@ interface GetFoodsQuery {
   sortOrder: "asc" | "desc";
   type?: string;
   status?: string;
-  region?: string;
-  destination?: string;
-  place?: string;
+  region?: string[];
+  destination?: string[];
+  place?: string[];
 }
 
 export type {
