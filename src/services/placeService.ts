@@ -51,9 +51,9 @@ const getPlacesService = async (query: GetPlacesQuery) => {
   // Place before the destination lookup joins anything
   const filterQuery = {
     ...query,
-    destination: query.destination
-      ? new Types.ObjectId(query.destination)
-      : undefined,
+    destination: query.destination?.map(
+      (destination) => new Types.ObjectId(destination),
+    ),
   };
 
   // 2 : Build and run the aggregation pipeline to get the page of results

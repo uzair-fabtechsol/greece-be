@@ -76,7 +76,19 @@ const getPlacesQuerySchema = z.object({
   sortOrder: z.enum(["asc", "desc"]).default("desc"),
   type: typeEnum.optional(),
   status: placeStatusEnum.optional(),
-  destination: z.string().trim().optional(),
+  // Comma-separated list of destination ids (e.g. "id1,id2") so a single
+  // filter can express multiple destinations, not just one.
+  destination: z
+    .string()
+    .trim()
+    .transform((value) =>
+      value
+        .split(",")
+        .map((destination) => destination.trim())
+        .filter(Boolean),
+    )
+    .pipe(z.array(z.string().trim().min(1)).min(1))
+    .optional(),
 });
 
 export {

@@ -22,7 +22,7 @@ interface GetPlacesQuery {
   sortOrder: "asc" | "desc";
   type?: string;
   status?: string;
-  destination?: string;
+  destination?: string[];
 }
 
 export type { CreatePlaceBody, UpdatePlaceBody, GetPlacesQuery };
