@@ -63,22 +63,24 @@ const createPlaceSchema = z.object({
 
 const updatePlaceSchema = createPlaceSchema.partial();
 
-const getPlacesQuerySchema = z.object({
-  search: z.string().trim().optional(),
-  projection: z.string().trim().optional(),
-  page: z.coerce.number().int().min(1).default(DEFAULT_PLACES_PAGE),
-  limit: z.coerce
-    .number()
-    .int()
-    .min(1)
-    .max(MAX_PLACES_LIMIT)
-    .default(DEFAULT_PLACES_LIMIT),
-  sortBy: z.enum(PLACE_SORT_FIELDS).default("createdAt"),
-  sortOrder: z.enum(["asc", "desc"]).default("desc"),
-  type: typeEnum.optional(),
-  status: placeStatusEnum.optional(),
-  destination: csvQueryParam(z.string().trim().min(1)),
-});
+const getPlacesQuerySchema = z
+  .object({
+    search: z.string().trim().optional(),
+    projection: z.string().trim().optional(),
+    page: z.coerce.number().int().min(1).default(DEFAULT_PLACES_PAGE),
+    limit: z.coerce
+      .number()
+      .int()
+      .min(1)
+      .max(MAX_PLACES_LIMIT)
+      .default(DEFAULT_PLACES_LIMIT),
+    sortBy: z.enum(PLACE_SORT_FIELDS).default("createdAt"),
+    sortOrder: z.enum(["asc", "desc"]).default("desc"),
+    type: typeEnum.optional(),
+    status: placeStatusEnum.optional(),
+    destination: csvQueryParam(z.string().trim().min(1)),
+  })
+  .strict();
 
 export {
   createPlaceSchema,

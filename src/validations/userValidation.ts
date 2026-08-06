@@ -23,35 +23,37 @@ const createUserSchema = z.object({
   role: z.literal(Role.Admin),
 });
 
-const getUsersQuerySchema = z.object({
-  search: z.string().trim().optional(),
-  projection: z.string().trim().optional(),
-  page: z.coerce.number().int().min(1).default(DEFAULT_USERS_PAGE),
-  limit: z.coerce
-    .number()
-    .int()
-    .min(1)
-    .max(MAX_USERS_LIMIT)
-    .default(DEFAULT_USERS_LIMIT),
-  sortBy: z.enum(USER_SORT_FIELDS).default("createdAt"),
-  sortOrder: z.enum(["asc", "desc"]).default("desc"),
-  // Comma-separated list of roles (e.g. "traveller,advertiser") so a single
-  // filter can express a group of roles, not just one.
-  role: z
-    .string()
-    .trim()
-    .transform((value) =>
-      value
-        .split(",")
-        .map((role) => role.trim())
-        .filter(Boolean),
-    )
-    .pipe(z.array(roleEnum).min(1))
-    .optional(),
-  isVerified: z
-    .enum(["true", "false"])
-    .transform((value) => value === "true")
-    .optional(),
-});
+const getUsersQuerySchema = z
+  .object({
+    search: z.string().trim().optional(),
+    projection: z.string().trim().optional(),
+    page: z.coerce.number().int().min(1).default(DEFAULT_USERS_PAGE),
+    limit: z.coerce
+      .number()
+      .int()
+      .min(1)
+      .max(MAX_USERS_LIMIT)
+      .default(DEFAULT_USERS_LIMIT),
+    sortBy: z.enum(USER_SORT_FIELDS).default("createdAt"),
+    sortOrder: z.enum(["asc", "desc"]).default("desc"),
+    // Comma-separated list of roles (e.g. "traveller,advertiser") so a single
+    // filter can express a group of roles, not just one.
+    role: z
+      .string()
+      .trim()
+      .transform((value) =>
+        value
+          .split(",")
+          .map((role) => role.trim())
+          .filter(Boolean),
+      )
+      .pipe(z.array(roleEnum).min(1))
+      .optional(),
+    isVerified: z
+      .enum(["true", "false"])
+      .transform((value) => value === "true")
+      .optional(),
+  })
+  .strict();
 
 export { createUserSchema, getUsersQuerySchema };

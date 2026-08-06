@@ -56,23 +56,25 @@ const createDestinationSchema = z.object({
 
 const updateDestinationSchema = createDestinationSchema.partial();
 
-const getDestinationsQuerySchema = z.object({
-  search: z.string().trim().optional(),
-  projection: z.string().trim().optional(),
-  page: z.coerce.number().int().min(1).default(DEFAULT_DESTINATIONS_PAGE),
-  limit: z.coerce
-    .number()
-    .int()
-    .min(1)
-    .max(MAX_DESTINATIONS_LIMIT)
-    .default(DEFAULT_DESTINATIONS_LIMIT),
-  sortBy: z.enum(DESTINATION_SORT_FIELDS).default("createdAt"),
-  sortOrder: z.enum(["asc", "desc"]).default("desc"),
-  type: destinationTypeEnum.optional(),
-  status: destinationStatusEnum.optional(),
-  bestSeason: seasonEnum.optional(),
-  region: csvQueryParam(z.string().trim().min(1)),
-});
+const getDestinationsQuerySchema = z
+  .object({
+    search: z.string().trim().optional(),
+    projection: z.string().trim().optional(),
+    page: z.coerce.number().int().min(1).default(DEFAULT_DESTINATIONS_PAGE),
+    limit: z.coerce
+      .number()
+      .int()
+      .min(1)
+      .max(MAX_DESTINATIONS_LIMIT)
+      .default(DEFAULT_DESTINATIONS_LIMIT),
+    sortBy: z.enum(DESTINATION_SORT_FIELDS).default("createdAt"),
+    sortOrder: z.enum(["asc", "desc"]).default("desc"),
+    type: destinationTypeEnum.optional(),
+    status: destinationStatusEnum.optional(),
+    bestSeason: seasonEnum.optional(),
+    region: csvQueryParam(z.string().trim().min(1)),
+  })
+  .strict();
 
 export {
   createDestinationSchema,

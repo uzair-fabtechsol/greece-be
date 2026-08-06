@@ -48,21 +48,23 @@ const createRegionSchema = z.object({
 
 const updateRegionSchema = createRegionSchema.partial();
 
-const getRegionsQuerySchema = z.object({
-  search: z.string().trim().optional(),
-  projection: z.string().trim().optional(),
-  page: z.coerce.number().int().min(1).default(DEFAULT_REGIONS_PAGE),
-  limit: z.coerce
-    .number()
-    .int()
-    .min(1)
-    .max(MAX_REGIONS_LIMIT)
-    .default(DEFAULT_REGIONS_LIMIT),
-  sortBy: z.enum(REGION_SORT_FIELDS).default("createdAt"),
-  sortOrder: z.enum(["asc", "desc"]).default("desc"),
-  type: typeEnum.optional(),
-  bestSeason: seasonEnum.optional(),
-  status: regionStatusEnum.optional(),
-});
+const getRegionsQuerySchema = z
+  .object({
+    search: z.string().trim().optional(),
+    projection: z.string().trim().optional(),
+    page: z.coerce.number().int().min(1).default(DEFAULT_REGIONS_PAGE),
+    limit: z.coerce
+      .number()
+      .int()
+      .min(1)
+      .max(MAX_REGIONS_LIMIT)
+      .default(DEFAULT_REGIONS_LIMIT),
+    sortBy: z.enum(REGION_SORT_FIELDS).default("createdAt"),
+    sortOrder: z.enum(["asc", "desc"]).default("desc"),
+    type: typeEnum.optional(),
+    bestSeason: seasonEnum.optional(),
+    status: regionStatusEnum.optional(),
+  })
+  .strict();
 
 export { createRegionSchema, updateRegionSchema, getRegionsQuerySchema };

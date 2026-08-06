@@ -107,6 +107,7 @@ const getFoodsQuerySchema = z
     destination: csvQueryParam(z.string().trim().min(1)),
     place: csvQueryParam(z.string().trim().min(1)),
   })
+  .strict()
   .refine(
     (data) =>
       [data.region, data.destination, data.place].filter(Boolean).length <=
