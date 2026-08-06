@@ -43,6 +43,7 @@ const createFoodSchema = z
     isFeatured: z.boolean().optional(),
     isIndexable: z.boolean().optional(),
   })
+  .strict()
   .refine(
     (data) => [data.region, data.destination, data.place].filter(Boolean)
       .length === 1,
@@ -71,6 +72,7 @@ const updateFoodSchema = z
     isFeatured: z.boolean().optional(),
     isIndexable: z.boolean().optional(),
   })
+  .strict()
   .refine(
     (data) => [data.region, data.destination, data.place].filter(Boolean)
       .length <= 1,
@@ -82,11 +84,11 @@ const updateFoodSchema = z
 
 const updateFeaturedStatusSchema = z.object({
   isFeatured: z.boolean(),
-});
+}).strict();
 
 const updateIndexableStatusSchema = z.object({
   isIndexable: z.boolean(),
-});
+}).strict();
 
 const getFoodsQuerySchema = z
   .object({

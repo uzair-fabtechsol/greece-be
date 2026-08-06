@@ -6,27 +6,35 @@ import {
 } from "@src/constants/limitConstant";
 import { SIGNUP_ROLES } from "@src/models/userModel";
 
-const signupSchema = z.object({
-  fullName: z.string().trim().min(NAME_MIN_LENGTH).max(NAME_MAX_LENGTH),
-  email: z.email().trim().toLowerCase(),
-  password: z.string().min(PASSWORD_MIN_LENGTH),
-  // Restricted to traveller/advertiser so a client can never sign itself up
-  // as an admin or superAdmin
-  role: z.enum(SIGNUP_ROLES),
-});
+const signupSchema = z
+  .object({
+    fullName: z.string().trim().min(NAME_MIN_LENGTH).max(NAME_MAX_LENGTH),
+    email: z.email().trim().toLowerCase(),
+    password: z.string().min(PASSWORD_MIN_LENGTH),
+    // Restricted to traveller/advertiser so a client can never sign itself up
+    // as an admin or superAdmin
+    role: z.enum(SIGNUP_ROLES),
+  })
+  .strict();
 
-const verifyOtpSchema = z.object({
-  email: z.email().trim().toLowerCase(),
-  otp: z.string().length(OTP_LENGTH),
-});
+const verifyOtpSchema = z
+  .object({
+    email: z.email().trim().toLowerCase(),
+    otp: z.string().length(OTP_LENGTH),
+  })
+  .strict();
 
-const resendOtpSchema = z.object({
-  email: z.email().trim().toLowerCase(),
-});
+const resendOtpSchema = z
+  .object({
+    email: z.email().trim().toLowerCase(),
+  })
+  .strict();
 
-const signinSchema = z.object({
-  email: z.email().trim().toLowerCase(),
-  password: z.string().min(PASSWORD_MIN_LENGTH),
-});
+const signinSchema = z
+  .object({
+    email: z.email().trim().toLowerCase(),
+    password: z.string().min(PASSWORD_MIN_LENGTH),
+  })
+  .strict();
 
 export { signupSchema, verifyOtpSchema, resendOtpSchema, signinSchema };

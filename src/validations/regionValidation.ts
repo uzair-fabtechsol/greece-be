@@ -26,25 +26,29 @@ const seasonEnum = z.enum(["spring", "summer", "autumn", "winter"]);
 
 const regionStatusEnum = z.enum(["draft", "published", "archived"]);
 
-const faqSchema = z.object({
-  question: z.string().trim().min(1),
-  answer: z.string().trim().min(1),
-});
+const faqSchema = z
+  .object({
+    question: z.string().trim().min(1),
+    answer: z.string().trim().min(1),
+  })
+  .strict();
 
-const createRegionSchema = z.object({
-  name: z.string().trim().min(NAME_MIN_LENGTH).max(NAME_MAX_LENGTH),
-  tagLine: z.string().trim().min(1).max(TAGLINE_MAX_LENGTH),
-  type: z.array(typeEnum).min(1),
-  bestSeason: z.array(seasonEnum).min(1),
-  status: regionStatusEnum.optional(),
-  about: z.string().trim().optional(),
-  photoGallery: z.array(z.url()).min(MIN_REGION_IMAGES),
-  tipsAndTricks: z
-    .array(z.string().trim())
-    .max(MAX_TIPS_AND_TRICKS)
-    .optional(),
-  faqs: z.array(faqSchema).optional(),
-});
+const createRegionSchema = z
+  .object({
+    name: z.string().trim().min(NAME_MIN_LENGTH).max(NAME_MAX_LENGTH),
+    tagLine: z.string().trim().min(1).max(TAGLINE_MAX_LENGTH),
+    type: z.array(typeEnum).min(1),
+    bestSeason: z.array(seasonEnum).min(1),
+    status: regionStatusEnum.optional(),
+    about: z.string().trim().optional(),
+    photoGallery: z.array(z.url()).min(MIN_REGION_IMAGES),
+    tipsAndTricks: z
+      .array(z.string().trim())
+      .max(MAX_TIPS_AND_TRICKS)
+      .optional(),
+    faqs: z.array(faqSchema).optional(),
+  })
+  .strict();
 
 const updateRegionSchema = createRegionSchema.partial();
 

@@ -37,29 +37,33 @@ const typeEnum = z.enum([
 
 const placeStatusEnum = z.enum(["draft", "published", "archived"]);
 
-const heritageSchema = z.object({
-  image: z.url(),
-  historicalFact: z.string().trim().min(1),
-});
+const heritageSchema = z
+  .object({
+    image: z.url(),
+    historicalFact: z.string().trim().min(1),
+  })
+  .strict();
 
-const createPlaceSchema = z.object({
-  destination: z.string().trim().min(1),
-  name: z.string().trim().min(NAME_MIN_LENGTH).max(NAME_MAX_LENGTH),
-  tagLine: z.string().trim().min(1).max(TAGLINE_MAX_LENGTH),
-  type: typeEnum,
-  status: placeStatusEnum.optional(),
-  about: z.string().trim().optional(),
-  heritage: z.array(heritageSchema).max(MAX_HERITAGE_ENTRIES).optional(),
-  sustainabilityNotes: z
-    .array(z.string().trim())
-    .max(MAX_SUSTAINABILITY_NOTES)
-    .optional(),
-  photoGallery: z.array(z.url()).min(MIN_PLACE_IMAGES),
-  tipsAndTricks: z
-    .array(z.string().trim())
-    .max(MAX_TIPS_AND_TRICKS)
-    .optional(),
-});
+const createPlaceSchema = z
+  .object({
+    destination: z.string().trim().min(1),
+    name: z.string().trim().min(NAME_MIN_LENGTH).max(NAME_MAX_LENGTH),
+    tagLine: z.string().trim().min(1).max(TAGLINE_MAX_LENGTH),
+    type: typeEnum,
+    status: placeStatusEnum.optional(),
+    about: z.string().trim().optional(),
+    heritage: z.array(heritageSchema).max(MAX_HERITAGE_ENTRIES).optional(),
+    sustainabilityNotes: z
+      .array(z.string().trim())
+      .max(MAX_SUSTAINABILITY_NOTES)
+      .optional(),
+    photoGallery: z.array(z.url()).min(MIN_PLACE_IMAGES),
+    tipsAndTricks: z
+      .array(z.string().trim())
+      .max(MAX_TIPS_AND_TRICKS)
+      .optional(),
+  })
+  .strict();
 
 const updatePlaceSchema = createPlaceSchema.partial();
 

@@ -62,6 +62,7 @@ const createActivitySchema = z
     isFeatured: z.boolean().optional(),
     isIndexable: z.boolean().optional(),
   })
+  .strict()
   .refine(
     (data) => [data.region, data.destination, data.place].filter(Boolean)
       .length === 1,
@@ -100,6 +101,7 @@ const updateActivitySchema = z
     isFeatured: z.boolean().optional(),
     isIndexable: z.boolean().optional(),
   })
+  .strict()
   .refine(
     (data) => [data.region, data.destination, data.place].filter(Boolean)
       .length <= 1,
@@ -111,11 +113,11 @@ const updateActivitySchema = z
 
 const updateFeaturedStatusSchema = z.object({
   isFeatured: z.boolean(),
-});
+}).strict();
 
 const updateIndexableStatusSchema = z.object({
   isIndexable: z.boolean(),
-});
+}).strict();
 
 const getActivitiesQuerySchema = z
   .object({

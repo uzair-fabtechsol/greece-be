@@ -28,31 +28,37 @@ const seasonEnum = z.enum(["spring", "summer", "autumn", "winter"]);
 
 const destinationStatusEnum = z.enum(["draft", "published", "archived"]);
 
-const quickFactsSchema = z.object({
-  country: z.string().trim().min(1),
-  language: z.string().trim().min(1),
-  currency: z.object({
-    currencyName: z.string().trim().min(1),
-    currencySign: z.string().trim().min(1),
-  }),
-  timeZone: z.string().trim().min(1),
-  bestSeason: z.array(seasonEnum).min(1),
-});
+const quickFactsSchema = z
+  .object({
+    country: z.string().trim().min(1),
+    language: z.string().trim().min(1),
+    currency: z
+      .object({
+        currencyName: z.string().trim().min(1),
+        currencySign: z.string().trim().min(1),
+      })
+      .strict(),
+    timeZone: z.string().trim().min(1),
+    bestSeason: z.array(seasonEnum).min(1),
+  })
+  .strict();
 
-const createDestinationSchema = z.object({
-  region: z.string().trim().min(1),
-  name: z.string().trim().min(NAME_MIN_LENGTH).max(NAME_MAX_LENGTH),
-  tagLine: z.string().trim().min(1).max(TAGLINE_MAX_LENGTH),
-  type: destinationTypeEnum,
-  status: destinationStatusEnum.optional(),
-  quickFacts: quickFactsSchema,
-  about: z.string().trim().optional(),
-  photoGallery: z.array(z.url()).min(MIN_DESTINATION_IMAGES),
-  tipsAndTricks: z
-    .array(z.string().trim())
-    .max(MAX_TIPS_AND_TRICKS)
-    .optional(),
-});
+const createDestinationSchema = z
+  .object({
+    region: z.string().trim().min(1),
+    name: z.string().trim().min(NAME_MIN_LENGTH).max(NAME_MAX_LENGTH),
+    tagLine: z.string().trim().min(1).max(TAGLINE_MAX_LENGTH),
+    type: destinationTypeEnum,
+    status: destinationStatusEnum.optional(),
+    quickFacts: quickFactsSchema,
+    about: z.string().trim().optional(),
+    photoGallery: z.array(z.url()).min(MIN_DESTINATION_IMAGES),
+    tipsAndTricks: z
+      .array(z.string().trim())
+      .max(MAX_TIPS_AND_TRICKS)
+      .optional(),
+  })
+  .strict();
 
 const updateDestinationSchema = createDestinationSchema.partial();
 
