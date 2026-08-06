@@ -19,9 +19,23 @@ interface GetRegionsQuery {
   limit: number;
   sortBy: "name" | "createdAt" | "updatedAt";
   sortOrder: "asc" | "desc";
-  type?: string;
+  type?: string[];
   bestSeason?: string;
   status?: string;
 }
 
-export type { CreateRegionBody, UpdateRegionBody, GetRegionsQuery };
+interface GetRegionRecommendationsQuery {
+  historyAndCulture: number;
+  beachesAndCoasts: number;
+  foodAndWine: number;
+  natureAndOutdoors: number;
+  nightLife: number;
+  relaxation: number;
+}
+
+export type {
+  CreateRegionBody,
+  UpdateRegionBody,
+  GetRegionsQuery,
+  GetRegionRecommendationsQuery,
+};

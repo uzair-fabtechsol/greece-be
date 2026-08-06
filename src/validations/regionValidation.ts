@@ -65,10 +65,40 @@ const getRegionsQuerySchema = z
       .default(DEFAULT_REGIONS_LIMIT),
     sortBy: z.enum(REGION_SORT_FIELDS).default("createdAt"),
     sortOrder: z.enum(["asc", "desc"]).default("desc"),
-    type: typeEnum.optional(),
+    // Comma-separated list of types (e.g. "island,mainland") so a single
+    // filter can express multiple types, not just one.
+    type: z
+      .string()
+      .trim()
+      .transform((value) =>
+        value
+          .split(",")
+          .map((type) => type.trim())
+          .filter(Boolean),
+      )
+      .pipe(z.array(typeEnum).min(1))
+      .optional(),
     bestSeason: seasonEnum.optional(),
     status: regionStatusEnum.optional(),
   })
   .strict();
 
-export { createRegionSchema, updateRegionSchema, getRegionsQuerySchema };
+const interestScore = z.coerce.number().min(0).max(100).default(0);
+
+const getRegionRecommendationsQuerySchema = z
+  .object({
+    historyAndCulture: interestScore,
+    beachesAndCoasts: interestScore,
+    foodAndWine: interestScore,
+    natureAndOutdoors: interestScore,
+    nightLife: interestScore,
+    relaxation: interestScore,
+  })
+  .strict();
+
+export {
+  createRegionSchema,
+  updateRegionSchema,
+  getRegionsQuerySchema,
+  getRegionRecommendationsQuerySchema,
+};

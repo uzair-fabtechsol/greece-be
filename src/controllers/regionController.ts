@@ -1,6 +1,7 @@
 import type { Request, Response } from "express";
 import catchAsync from "@src/utils/catchAsync";
 import sendResponse from "@src/utils/sendResponse";
+import { buildRegionRecommendationsQuery } from "@src/utils/regionUtils";
 import {
   createRegionService,
   getRegionsService,
@@ -12,6 +13,7 @@ import type {
   CreateRegionBody,
   UpdateRegionBody,
   GetRegionsQuery,
+  GetRegionRecommendationsQuery,
 } from "@src/types/regionType";
 
 // FUNCTION
@@ -90,4 +92,30 @@ const deleteRegion = catchAsync(
   },
 );
 
-export { createRegion, getRegions, getRegionById, updateRegion, deleteRegion };
+// FUNCTION
+const getRegionsRecommendations = catchAsync(
+  async (req: Request, res: Response): Promise<void> => {
+    const interests = req.validatedQuery as GetRegionRecommendationsQuery;
+
+    const query = buildRegionRecommendationsQuery(interests);
+
+    console.log("query------------------------", query);
+
+    const { regions, pagination } = await getRegionsService(query);
+
+    sendResponse(res, 200, {
+      status: "success",
+      message: "Regions fetched successfully",
+      data: { regions, pagination },
+    });
+  },
+);
+
+export {
+  createRegion,
+  getRegions,
+  getRegionById,
+  updateRegion,
+  deleteRegion,
+  getRegionsRecommendations,
+};

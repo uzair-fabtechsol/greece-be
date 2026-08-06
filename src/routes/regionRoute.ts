@@ -5,6 +5,7 @@ import {
   getRegionById,
   updateRegion,
   deleteRegion,
+  getRegionsRecommendations,
 } from "@src/controllers/regionController";
 import validation from "@src/middlewares/validation";
 import validateObjectId from "@src/middlewares/validateObjectId";
@@ -15,10 +16,16 @@ import {
   createRegionSchema,
   updateRegionSchema,
   getRegionsQuerySchema,
+  getRegionRecommendationsQuerySchema,
 } from "@src/validations/regionValidation";
 
 const regionRouter = Router();
 
+regionRouter.get(
+  "/recommendations",
+  validation(getRegionRecommendationsQuerySchema, "query"),
+  getRegionsRecommendations,
+);
 regionRouter.post(
   "/",
   protect,
