@@ -10,7 +10,7 @@ interface GetUsersQuery {
   limit: number;
   sortBy: "fullName" | "createdAt" | "updatedAt";
   sortOrder: "asc" | "desc";
-  role?: string;
+  role?: string[];
   isVerified?: boolean;
 }
 

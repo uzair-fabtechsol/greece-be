@@ -50,7 +50,7 @@ class APIFeatures<T> {
     for (const field of fields) {
       const value = query[field];
       if (value !== undefined && value !== null && value !== "") {
-        match[field] = value;
+        match[field] = Array.isArray(value) ? { $in: value } : value;
       }
     }
 

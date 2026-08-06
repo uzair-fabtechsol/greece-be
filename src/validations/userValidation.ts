@@ -35,7 +35,19 @@ const getUsersQuerySchema = z.object({
     .default(DEFAULT_USERS_LIMIT),
   sortBy: z.enum(USER_SORT_FIELDS).default("createdAt"),
   sortOrder: z.enum(["asc", "desc"]).default("desc"),
-  role: roleEnum.optional(),
+  // Comma-separated list of roles (e.g. "traveller,advertiser") so a single
+  // filter can express a group of roles, not just one.
+  role: z
+    .string()
+    .trim()
+    .transform((value) =>
+      value
+        .split(",")
+        .map((role) => role.trim())
+        .filter(Boolean),
+    )
+    .pipe(z.array(roleEnum).min(1))
+    .optional(),
   isVerified: z
     .enum(["true", "false"])
     .transform((value) => value === "true")
