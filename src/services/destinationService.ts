@@ -53,7 +53,7 @@ const getDestinationsService = async (query: GetDestinationsQuery) => {
   // before handing it to APIFeatures
   const filterQuery = {
     ...query,
-    region: query.region ? new Types.ObjectId(query.region) : undefined,
+    region: query.region?.map((region) => new Types.ObjectId(region)),
     "quickFacts.bestSeason": query.bestSeason,
   };
 

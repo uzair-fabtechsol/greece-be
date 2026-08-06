@@ -70,7 +70,19 @@ const getDestinationsQuerySchema = z.object({
   type: destinationTypeEnum.optional(),
   status: destinationStatusEnum.optional(),
   bestSeason: seasonEnum.optional(),
-  region: z.string().trim().optional(),
+  // Comma-separated list of region ids (e.g. "id1,id2") so a single filter
+  // can express multiple regions, not just one.
+  region: z
+    .string()
+    .trim()
+    .transform((value) =>
+      value
+        .split(",")
+        .map((region) => region.trim())
+        .filter(Boolean),
+    )
+    .pipe(z.array(z.string().trim().min(1)).min(1))
+    .optional(),
 });
 
 export {

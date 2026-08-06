@@ -31,7 +31,7 @@ interface GetDestinationsQuery {
   type?: string;
   status?: string;
   bestSeason?: string;
-  region?: string;
+  region?: string[];
 }
 
 export type {
