@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import ms from "ms";
+import { createHash } from "crypto";
 import type { CookieOptions } from "express";
 import { OTP_LENGTH, OTP_EXPIRY_MINUTES } from "@src/constants/authConstant";
 import transporter from "@src/config/mailer";
@@ -104,6 +105,11 @@ const verifyRefreshToken = (token: string): TokenPayload => {
 };
 
 // FUNCTION
+const hashRefreshToken = (refreshToken: string): string => {
+  return createHash("sha256").update(refreshToken).digest("hex");
+};
+
+// FUNCTION
 const getAuthCookieOptions = (maxAge: number): CookieOptions => {
   return {
     httpOnly: true,
@@ -132,6 +138,7 @@ export {
   generateRefreshToken,
   verifyAccessToken,
   verifyRefreshToken,
+  hashRefreshToken,
   getAuthCookieOptions,
   getAccessTokenCookieOptions,
   getRefreshTokenCookieOptions,

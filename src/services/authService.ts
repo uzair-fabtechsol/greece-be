@@ -17,6 +17,7 @@ import {
   generateAccessToken,
   generateRefreshToken,
   verifyRefreshToken,
+  hashRefreshToken,
 } from "@src/utils/authUtils";
 
 // FUNCTION
@@ -167,7 +168,11 @@ const signinService = async (body: SigninBody) => {
   const accessToken = generateAccessToken(payload);
   const refreshToken = generateRefreshToken(payload);
 
-  // 6 : Send response
+  // 6 : Store a hash of the refresh token so it can be verified on rotation
+  user.refreshTokenHash = hashRefreshToken(refreshToken);
+  await user.save();
+
+  // 7 : Send response
   return {
     user: {
       _id: user._id,
@@ -197,17 +202,33 @@ const rotateTokenService = async (refreshToken: string | undefined) => {
   }
 
   // 3 : Ensure the user still exists
-  const user = await UserModel.findById(payload.id);
+  const user = await UserModel.findById(payload.id).select(
+    "+refreshTokenHash",
+  );
   if (!user) {
     throw new AppError(401, "User no longer exists. Please log in again");
   }
 
-  // 4 : Issue a new access and refresh token pair
+  // 4 : Ensure the presented refresh token matches the one stored for this
+  // user. A mismatch means the token was already rotated (reuse/theft), so
+  // the stored token is cleared, forcing a fresh login on every device.
+  const incomingHash = hashRefreshToken(refreshToken);
+  if (!user.refreshTokenHash || user.refreshTokenHash !== incomingHash) {
+    user.refreshTokenHash = null;
+    await user.save();
+    throw new AppError(401, "Invalid or expired refresh token. Please log in again");
+  }
+
+  // 5 : Issue a new access and refresh token pair
   const newPayload = { id: user._id.toString(), role: user.role };
   const accessToken = generateAccessToken(newPayload);
   const newRefreshToken = generateRefreshToken(newPayload);
 
-  // 5 : Send response
+  // 6 : Store the hash of the newly issued refresh token
+  user.refreshTokenHash = hashRefreshToken(newRefreshToken);
+  await user.save();
+
+  // 7 : Send response
   return {
     accessToken,
     refreshToken: newRefreshToken,
