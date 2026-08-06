@@ -1,3 +1,4 @@
+import { inspect } from "util";
 import type { Model, PipelineStage } from "mongoose";
 import type { Pagination } from "@src/utils/sendResponse";
 
@@ -146,7 +147,7 @@ class APIFeatures<T> {
   async exec(): Promise<{ data: T[]; pagination: Pagination | null }> {
     console.log(
       "pipeline --------------------------------------- \n",
-      this.pipeline,
+      inspect(this.pipeline, { depth: null, colors: true }),
     );
 
     const results = await this.model.aggregate(this.pipeline);
