@@ -18,6 +18,7 @@ import activityRouter from "@src/routes/activityRoute";
 import foodRouter from "@src/routes/foodRoute";
 import restaurantRouter from "@src/routes/restaurantRoute";
 import s3Router from "@src/routes/s3Route";
+import tripRouter from "@src/routes/tripRoute";
 
 // ─── Process-level Safety Nets ────────────────────────────────────────────────
 
@@ -127,6 +128,7 @@ app.use("/api/v1/activities", activityRouter);
 app.use("/api/v1/foods", foodRouter);
 app.use("/api/v1/restaurants", restaurantRouter);
 app.use("/api/v1/s3", s3Router);
+app.use("/api/v1/trips", tripRouter);
 
 // ─── Unhandled Routes ─────────────────────────────────────────────────────────
 
