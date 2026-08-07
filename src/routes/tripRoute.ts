@@ -9,6 +9,8 @@ import {
 import validation from "@src/middlewares/validation";
 import validateObjectId from "@src/middlewares/validateObjectId";
 import { protect } from "@src/middlewares/protect";
+import { restrictTo } from "@src/middlewares/restrictTo";
+import { Role } from "@src/models/userModel";
 import {
   createTripSchema,
   updateTripSchema,
@@ -20,18 +22,38 @@ const tripRouter = Router();
 tripRouter.post(
   "/",
   protect,
+  restrictTo(Role.Traveller),
   validation(createTripSchema, "body"),
   createTrip,
 );
-tripRouter.get("/", protect, validation(getTripsQuerySchema, "query"), getTrips);
-tripRouter.get("/:id", protect, validateObjectId(), getTripById);
+tripRouter.get(
+  "/",
+  protect,
+  restrictTo(Role.SuperAdmin, Role.Admin, Role.Traveller),
+  validation(getTripsQuerySchema, "query"),
+  getTrips,
+);
+tripRouter.get(
+  "/:id",
+  protect,
+  restrictTo(Role.SuperAdmin, Role.Admin, Role.Traveller),
+  validateObjectId(),
+  getTripById,
+);
 tripRouter.patch(
   "/:id",
   protect,
+  restrictTo(Role.SuperAdmin, Role.Admin, Role.Traveller),
   validateObjectId(),
   validation(updateTripSchema, "body"),
   updateTrip,
 );
-tripRouter.delete("/:id", protect, validateObjectId(), deleteTrip);
+tripRouter.delete(
+  "/:id",
+  protect,
+  restrictTo(Role.SuperAdmin, Role.Admin, Role.Traveller),
+  validateObjectId(),
+  deleteTrip,
+);
 
 export default tripRouter;

@@ -2,7 +2,10 @@ import TripModel from "@src/models/tripModel";
 import { Role } from "@src/models/userModel";
 import AppError from "@src/utils/appError";
 import APIFeatures from "@src/utils/apiFeatures";
-import { validateTripReferences } from "@src/utils/tripUtils";
+import {
+  validateTripReferences,
+  validateTripReferenceParents,
+} from "@src/utils/tripUtils";
 import type {
   CreateTripBody,
   UpdateTripBody,
@@ -14,16 +17,20 @@ const ADMIN_ROLES: string[] = [Role.SuperAdmin, Role.Admin];
 // FUNCTION
 const createTripService = async (
   body: CreateTripBody,
-  userId: string,
+  travellerId: string,
 ) => {
   // 1 : Verify every submitted region/destination/place/restaurant/
   // activity/food id actually exists
   await validateTripReferences(body);
 
-  // 2 : Create the trip, owned by the requesting user
-  const trip = await TripModel.create({ ...body, user: userId });
+  // 2 : Verify each destination/place/activity/food/restaurant belongs to
+  // the correct parent submitted alongside it
+  await validateTripReferenceParents(body);
 
-  // 3 : Send response
+  // 3 : Create the trip, owned by the requesting traveller
+  const trip = await TripModel.create({ ...body, traveller: travellerId });
+
+  // 4 : Send response
   return { trip };
 };
 
@@ -33,10 +40,12 @@ const getTripsService = async (
   reqUser: { _id: string; role: string },
 ) => {
   // 1 : Non-admins are always scoped to their own trips; admins may
-  // optionally filter down to a specific user via the query
+  // optionally filter down to a specific traveller via the query
   const filterQuery = {
     ...query,
-    user: ADMIN_ROLES.includes(reqUser.role) ? query.user : reqUser._id,
+    traveller: ADMIN_ROLES.includes(reqUser.role)
+      ? query.traveller
+      : reqUser._id,
   };
 
   // 2 : Build and run the aggregation pipeline to get the page of results
@@ -46,7 +55,7 @@ const getTripsService = async (
     filterQuery,
     [],
   )
-    .filter(["user"])
+    .filter(["traveller"])
     .sort()
     .paginate()
     .exec();
@@ -68,7 +77,7 @@ const getTripByIdService = async (
 
   // 2 : Only the owner or an admin may view it
   if (
-    trip.user.toString() !== reqUser._id &&
+    trip.traveller.toString() !== reqUser._id &&
     !ADMIN_ROLES.includes(reqUser.role)
   ) {
     throw new AppError(403, "You do not have permission to access this trip");
@@ -92,7 +101,7 @@ const updateTripService = async (
 
   // 2 : Only the owner or an admin may update it
   if (
-    trip.user.toString() !== reqUser._id &&
+    trip.traveller.toString() !== reqUser._id &&
     !ADMIN_ROLES.includes(reqUser.role)
   ) {
     throw new AppError(403, "You do not have permission to update this trip");
@@ -101,11 +110,16 @@ const updateTripService = async (
   // 3 : Verify every submitted reference id actually exists
   await validateTripReferences(body);
 
-  // 4 : Apply the update and persist it
+  // 4 : Verify each destination/place/activity/food/restaurant belongs to
+  // the correct parent submitted alongside it. Only pairs actually present
+  // in this partial update are checked (see validateTripReferenceParents).
+  await validateTripReferenceParents(body);
+
+  // 5 : Apply the update and persist it
   Object.assign(trip, body);
   await trip.save();
 
-  // 5 : Send response
+  // 6 : Send response
   return { trip };
 };
 
@@ -122,7 +136,7 @@ const deleteTripService = async (
 
   // 2 : Only the owner or an admin may delete it
   if (
-    trip.user.toString() !== reqUser._id &&
+    trip.traveller.toString() !== reqUser._id &&
     !ADMIN_ROLES.includes(reqUser.role)
   ) {
     throw new AppError(403, "You do not have permission to delete this trip");

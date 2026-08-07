@@ -78,7 +78,7 @@ const createTripSchema = z
     interests: interestsSchema,
     dailySchedule: dailyScheduleEnum,
     mobilityLevel: mobilityLevelEnum,
-    regions: z.array(refId).optional(),
+    regions: z.array(refId).min(1),
     destinations: z.array(refId).optional(),
     places: z.array(refId).optional(),
     restaurants: z.array(refId).optional(),
@@ -115,7 +115,10 @@ const updateTripSchema = z
     interests: interestsSchema.optional(),
     dailySchedule: dailyScheduleEnum.optional(),
     mobilityLevel: mobilityLevelEnum.optional(),
-    regions: z.array(refId).optional(),
+    // Optional since this is a partial update, but if regions is submitted
+    // at all it can't be cleared out to empty — a trip always needs at
+    // least 1 region.
+    regions: z.array(refId).min(1).optional(),
     destinations: z.array(refId).optional(),
     places: z.array(refId).optional(),
     restaurants: z.array(refId).optional(),
@@ -160,9 +163,9 @@ const getTripsQuerySchema = z
       .default(DEFAULT_TRIPS_LIMIT),
     sortBy: z.enum(TRIP_SORT_FIELDS).default("createdAt"),
     sortOrder: z.enum(["asc", "desc"]).default("desc"),
-    // Admin-only: filter trips down to a specific user's. Ignored for
+    // Admin-only: filter trips down to a specific traveller's. Ignored for
     // non-admin callers, who are always scoped to their own trips.
-    user: z.string().trim().min(1).optional(),
+    traveller: z.string().trim().min(1).optional(),
   })
   .strict();
 

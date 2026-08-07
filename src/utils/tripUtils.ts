@@ -47,4 +47,156 @@ const validateTripReferences = async (
   );
 };
 
-export { validateTripReferences };
+// FUNCTION
+// Every destination submitted must belong to one of the submitted regions.
+// One query to fetch each destination's region, one Set for O(1) membership
+// checks — O(n) overall, not a nested-loop O(n^2) comparison.
+const validateDestinationsBelongToRegions = async (
+  regions: string[] = [],
+  destinations: string[] = [],
+): Promise<void> => {
+  if (destinations.length === 0) {
+    return;
+  }
+
+  const regionIdSet = new Set(regions);
+
+  const destinationDocs = await DestinationModel.find({
+    _id: { $in: [...new Set(destinations)] },
+  })
+    .select("region")
+    .lean<{ region: { toString(): string } }[]>();
+
+  const hasInvalidDestination = destinationDocs.some(
+    (destination) => !regionIdSet.has(destination.region.toString()),
+  );
+
+  if (hasInvalidDestination) {
+    throw new AppError(
+      400,
+      "One or more destinations do not belong to the submitted regions",
+    );
+  }
+};
+
+// FUNCTION
+// Every place submitted must belong to one of the submitted destinations.
+// Same O(n) shape as validateDestinationsBelongToRegions.
+const validatePlacesBelongToDestinations = async (
+  destinations: string[] = [],
+  places: string[] = [],
+): Promise<void> => {
+  if (places.length === 0) {
+    return;
+  }
+
+  const destinationIdSet = new Set(destinations);
+
+  const placeDocs = await PlaceModel.find({
+    _id: { $in: [...new Set(places)] },
+  })
+    .select("destination")
+    .lean<{ destination: { toString(): string } }[]>();
+
+  const hasInvalidPlace = placeDocs.some(
+    (place) => !destinationIdSet.has(place.destination.toString()),
+  );
+
+  if (hasInvalidPlace) {
+    throw new AppError(
+      400,
+      "One or more places do not belong to the submitted destinations",
+    );
+  }
+};
+
+interface ParentableDoc {
+  region?: { toString(): string } | null;
+  destination?: { toString(): string } | null;
+  place?: { toString(): string } | null;
+}
+
+// FUNCTION
+// Activities/foods/restaurants each carry exactly one parent (region,
+// destination, or place). Whichever one a resource has must be present in
+// the trip's matching submitted array.
+const validateSingleParentResources = async (
+  model: Model<unknown>,
+  resourceIds: string[] = [],
+  regions: string[] = [],
+  destinations: string[] = [],
+  places: string[] = [],
+  label: string,
+): Promise<void> => {
+  if (resourceIds.length === 0) {
+    return;
+  }
+
+  const regionIdSet = new Set(regions);
+  const destinationIdSet = new Set(destinations);
+  const placeIdSet = new Set(places);
+
+  const docs = await model
+    .find({ _id: { $in: [...new Set(resourceIds)] } })
+    .select("region destination place")
+    .lean<ParentableDoc[]>();
+
+  const hasInvalidResource = docs.some((doc) => {
+    if (doc.region) return !regionIdSet.has(doc.region.toString());
+    if (doc.destination) return !destinationIdSet.has(doc.destination.toString());
+    if (doc.place) return !placeIdSet.has(doc.place.toString());
+    return true;
+  });
+
+  if (hasInvalidResource) {
+    throw new AppError(
+      400,
+      `One or more ${label} do not belong to the submitted regions, destinations, or places`,
+    );
+  }
+};
+
+// FUNCTION
+// Runs every parent-hierarchy check for a trip's reference arrays. Only
+// checks the fields actually present in the body, so a partial update that
+// doesn't touch, say, destinations/places, skips that pair's validation.
+const validateTripReferenceParents = async (
+  body: CreateTripBody | UpdateTripBody,
+): Promise<void> => {
+  await validateDestinationsBelongToRegions(body.regions, body.destinations);
+  await validatePlacesBelongToDestinations(body.destinations, body.places);
+  await Promise.all([
+    validateSingleParentResources(
+      ActivityModel,
+      body.activities,
+      body.regions,
+      body.destinations,
+      body.places,
+      "activities",
+    ),
+    validateSingleParentResources(
+      FoodModel,
+      body.foods,
+      body.regions,
+      body.destinations,
+      body.places,
+      "foods",
+    ),
+    validateSingleParentResources(
+      RestaurantModel,
+      body.restaurants,
+      body.regions,
+      body.destinations,
+      body.places,
+      "restaurants",
+    ),
+  ]);
+};
+
+export {
+  validateTripReferences,
+  validateDestinationsBelongToRegions,
+  validatePlacesBelongToDestinations,
+  validateSingleParentResources,
+  validateTripReferenceParents,
+};

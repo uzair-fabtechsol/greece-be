@@ -18,7 +18,7 @@ interface CreateTripBody {
   interests: InterestsBody;
   dailySchedule: string;
   mobilityLevel: string;
-  regions?: string[];
+  regions: string[];
   destinations?: string[];
   places?: string[];
   restaurants?: string[];
@@ -33,7 +33,7 @@ interface GetTripsQuery {
   limit: number;
   sortBy: "startDate" | "createdAt" | "updatedAt";
   sortOrder: "asc" | "desc";
-  user?: string;
+  traveller?: string;
 }
 
 export type {

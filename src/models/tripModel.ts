@@ -51,7 +51,7 @@ const interestScoreField = {
 
 const tripSchema = new Schema(
   {
-    user: {
+    traveller: {
       type: Schema.Types.ObjectId,
       ref: "User",
       required: true,
@@ -121,6 +121,10 @@ const tripSchema = new Schema(
     regions: {
       type: [{ type: Schema.Types.ObjectId, ref: "Region" }],
       default: [],
+      validate: {
+        validator: (value: unknown[]) => value.length >= 1,
+        message: "At least 1 region is required",
+      },
     },
     destinations: {
       type: [{ type: Schema.Types.ObjectId, ref: "Destination" }],
@@ -158,7 +162,7 @@ const tripSchema = new Schema(
   },
 );
 
-tripSchema.index({ user: 1, createdAt: -1 });
+tripSchema.index({ traveller: 1, createdAt: -1 });
 // tripSchema.index({ status: 1 });
 
 type TripDocType = InferSchemaType<typeof tripSchema>;
