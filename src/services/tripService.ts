@@ -1,3 +1,4 @@
+import { Types, type PipelineStage } from "mongoose";
 import TripModel from "@src/models/tripModel";
 import { Role } from "@src/models/userModel";
 import AppError from "@src/utils/appError";
@@ -6,13 +7,82 @@ import {
   validateTripReferences,
   validateTripReferenceParents,
 } from "@src/utils/tripUtils";
-import type {
-  CreateTripBody,
-  UpdateTripBody,
-  GetTripsQuery,
-} from "@src/types/tripType";
+import { USER_PRIVATE_FIELDS } from "@src/constants/userConstant";
+import type { CreateTripBody, GetTripsQuery } from "@src/types/tripType";
 
 const ADMIN_ROLES: string[] = [Role.SuperAdmin, Role.Admin];
+
+const tripLookupStages: PipelineStage.FacetPipelineStage[] = [
+  {
+    $lookup: {
+      from: "users",
+      localField: "traveller",
+      foreignField: "_id",
+      as: "travellerDetails",
+      pipeline: [{ $unset: [...USER_PRIVATE_FIELDS] }],
+    },
+  },
+  { $unwind: "$travellerDetails" },
+  {
+    $lookup: {
+      from: "regions",
+      localField: "regions",
+      foreignField: "_id",
+      as: "regionsDetails",
+    },
+  },
+  {
+    $lookup: {
+      from: "destinations",
+      localField: "destinations",
+      foreignField: "_id",
+      as: "destinationsDetails",
+    },
+  },
+  {
+    $lookup: {
+      from: "places",
+      localField: "places",
+      foreignField: "_id",
+      as: "placesDetails",
+    },
+  },
+  {
+    $lookup: {
+      from: "restaurants",
+      localField: "restaurants",
+      foreignField: "_id",
+      as: "restaurantsDetails",
+    },
+  },
+  {
+    $lookup: {
+      from: "activities",
+      localField: "activities",
+      foreignField: "_id",
+      as: "activitiesDetails",
+    },
+  },
+  {
+    $lookup: {
+      from: "foods",
+      localField: "foods",
+      foreignField: "_id",
+      as: "foodsDetails",
+    },
+  },
+  {
+    $project: {
+      traveller: 0,
+      regions: 0,
+      destinations: 0,
+      places: 0,
+      restaurants: 0,
+      activities: 0,
+      foods: 0,
+    },
+  },
+];
 
 // FUNCTION
 const createTripService = async (
@@ -49,7 +119,8 @@ const getTripsService = async (
   };
 
   // 2 : Build and run the aggregation pipeline to get the page of results
-  // and the total count in one round trip
+  // and the total count in one round trip. The reference lookups are added
+  // via .addStages() after filter/sort so those stages stay index-eligible.
   const { data: trips, pagination } = await new APIFeatures(
     TripModel,
     filterQuery,
@@ -57,6 +128,7 @@ const getTripsService = async (
   )
     .filter(["traveller"])
     .sort()
+    .addStages(tripLookupStages)
     .paginate()
     .exec();
 
@@ -69,57 +141,59 @@ const getTripByIdService = async (
   id: string,
   reqUser: { _id: string; role: string },
 ) => {
-  // 1 : Find the trip by id
-  const trip = await TripModel.findById(id);
+  // 1 : Find the trip by id, scoped to the requester (admins can reach any
+  // trip; travellers only their own), pulling in every referenced resource
+  // via the same $lookup stages the list endpoint uses
+  const matchFilter = ADMIN_ROLES.includes(reqUser.role)
+    ? { _id: new Types.ObjectId(id) }
+    : { _id: new Types.ObjectId(id), traveller: new Types.ObjectId(reqUser._id) };
+
+  const [trip] = await TripModel.aggregate([
+    { $match: matchFilter },
+    ...tripLookupStages,
+  ]);
+
   if (!trip) {
     throw new AppError(404, "Trip not found");
   }
 
-  // 2 : Only the owner or an admin may view it
-  if (
-    trip.traveller.toString() !== reqUser._id &&
-    !ADMIN_ROLES.includes(reqUser.role)
-  ) {
-    throw new AppError(403, "You do not have permission to access this trip");
-  }
-
-  // 3 : Send response
+  // 2 : Send response
   return { trip };
 };
 
 // FUNCTION
+// Full replace (PUT): the client sends the complete trip, and this applies
+// the exact same validation create does. Every field not present in body is
+// wiped rather than left untouched — that's the point of PUT vs PATCH. Only
+// _id and traveller survive from the existing document.
 const updateTripService = async (
   id: string,
-  body: UpdateTripBody,
+  body: CreateTripBody,
   reqUser: { _id: string; role: string },
 ) => {
-  // 1 : Find the trip to update
-  const trip = await TripModel.findById(id);
+  // 1 : Find the trip to replace, scoped to the requester (admins can reach
+  // any trip; travellers only their own)
+  const trip = await TripModel.findOne(
+    ADMIN_ROLES.includes(reqUser.role)
+      ? { _id: id }
+      : { _id: id, traveller: reqUser._id },
+  );
   if (!trip) {
     throw new AppError(404, "Trip not found");
   }
 
-  // 2 : Only the owner or an admin may update it
-  if (
-    trip.traveller.toString() !== reqUser._id &&
-    !ADMIN_ROLES.includes(reqUser.role)
-  ) {
-    throw new AppError(403, "You do not have permission to update this trip");
-  }
-
-  // 3 : Verify every submitted reference id actually exists
+  // 2 : Verify every submitted reference id actually exists
   await validateTripReferences(body);
 
-  // 4 : Verify each destination/place/activity/food/restaurant belongs to
-  // the correct parent submitted alongside it. Only pairs actually present
-  // in this partial update are checked (see validateTripReferenceParents).
+  // 3 : Verify each destination/place/activity/food/restaurant belongs to
+  // the correct parent submitted alongside it
   await validateTripReferenceParents(body);
 
-  // 5 : Apply the update and persist it
-  Object.assign(trip, body);
+  // 4 : Replace the entire document, preserving only its ownership
+  trip.overwrite({ ...body, traveller: trip.traveller });
   await trip.save();
 
-  // 6 : Send response
+  // 5 : Send response
   return { trip };
 };
 
@@ -128,24 +202,21 @@ const deleteTripService = async (
   id: string,
   reqUser: { _id: string; role: string },
 ) => {
-  // 1 : Find the trip to delete
-  const trip = await TripModel.findById(id);
+  // 1 : Find the trip to delete, scoped to the requester (admins can reach
+  // any trip; travellers only their own)
+  const trip = await TripModel.findOne(
+    ADMIN_ROLES.includes(reqUser.role)
+      ? { _id: id }
+      : { _id: id, traveller: reqUser._id },
+  );
   if (!trip) {
     throw new AppError(404, "Trip not found");
   }
 
-  // 2 : Only the owner or an admin may delete it
-  if (
-    trip.traveller.toString() !== reqUser._id &&
-    !ADMIN_ROLES.includes(reqUser.role)
-  ) {
-    throw new AppError(403, "You do not have permission to delete this trip");
-  }
-
-  // 3 : Delete the trip
+  // 2 : Delete the trip
   await trip.deleteOne();
 
-  // 4 : Send response
+  // 3 : Send response
   return null;
 };
 

@@ -26,8 +26,6 @@ interface CreateTripBody {
   foods?: string[];
 }
 
-type UpdateTripBody = Partial<CreateTripBody>;
-
 interface GetTripsQuery {
   page: number;
   limit: number;
@@ -36,9 +34,4 @@ interface GetTripsQuery {
   traveller?: string;
 }
 
-export type {
-  InterestsBody,
-  CreateTripBody,
-  UpdateTripBody,
-  GetTripsQuery,
-};
+export type { InterestsBody, CreateTripBody, GetTripsQuery };

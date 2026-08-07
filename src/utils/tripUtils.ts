@@ -6,7 +6,7 @@ import RestaurantModel from "@src/models/restaurantModel";
 import ActivityModel from "@src/models/activityModel";
 import FoodModel from "@src/models/foodModel";
 import AppError from "@src/utils/appError";
-import type { CreateTripBody, UpdateTripBody } from "@src/types/tripType";
+import type { CreateTripBody } from "@src/types/tripType";
 
 const REFERENCE_FIELDS: {
   field: keyof CreateTripBody;
@@ -26,7 +26,7 @@ const REFERENCE_FIELDS: {
 // restaurants/activities/foods actually exists, so a trip never ends up
 // pointing at a broken reference.
 const validateTripReferences = async (
-  body: CreateTripBody | UpdateTripBody,
+  body: CreateTripBody,
 ): Promise<void> => {
   await Promise.all(
     REFERENCE_FIELDS.map(async ({ field, model, label }) => {
@@ -161,7 +161,7 @@ const validateSingleParentResources = async (
 // checks the fields actually present in the body, so a partial update that
 // doesn't touch, say, destinations/places, skips that pair's validation.
 const validateTripReferenceParents = async (
-  body: CreateTripBody | UpdateTripBody,
+  body: CreateTripBody,
 ): Promise<void> => {
   await validateDestinationsBelongToRegions(body.regions, body.destinations);
   await validatePlacesBelongToDestinations(body.destinations, body.places);

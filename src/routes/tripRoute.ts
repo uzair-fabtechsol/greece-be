@@ -13,7 +13,6 @@ import { restrictTo } from "@src/middlewares/restrictTo";
 import { Role } from "@src/models/userModel";
 import {
   createTripSchema,
-  updateTripSchema,
   getTripsQuerySchema,
 } from "@src/validations/tripValidation";
 
@@ -40,12 +39,12 @@ tripRouter.get(
   validateObjectId(),
   getTripById,
 );
-tripRouter.patch(
+tripRouter.put(
   "/:id",
   protect,
   restrictTo(Role.SuperAdmin, Role.Admin, Role.Traveller),
   validateObjectId(),
-  validation(updateTripSchema, "body"),
+  validation(createTripSchema, "body"),
   updateTrip,
 );
 tripRouter.delete(

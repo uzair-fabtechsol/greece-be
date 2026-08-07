@@ -95,63 +95,6 @@ const createTripSchema = z
     path: ["travellerNames"],
   });
 
-const updateTripSchema = z
-  .object({
-    startDate: z.coerce.date().optional(),
-    endDate: z.coerce.date().optional(),
-    adults: z
-      .number()
-      .int()
-      .min(MIN_ADULTS)
-      .max(MAX_ADULTS)
-      .optional(),
-    children: z.number().int().min(MIN_CHILDREN).max(MAX_CHILDREN).optional(),
-    groupType: groupTypeEnum.optional(),
-    travellerNames: z
-      .array(z.string().trim().min(1))
-      .max(MAX_TRAVELLER_NAMES)
-      .optional(),
-    travelPace: travelPaceEnum.optional(),
-    interests: interestsSchema.optional(),
-    dailySchedule: dailyScheduleEnum.optional(),
-    mobilityLevel: mobilityLevelEnum.optional(),
-    // Optional since this is a partial update, but if regions is submitted
-    // at all it can't be cleared out to empty — a trip always needs at
-    // least 1 region.
-    regions: z.array(refId).min(1).optional(),
-    destinations: z.array(refId).optional(),
-    places: z.array(refId).optional(),
-    restaurants: z.array(refId).optional(),
-    activities: z.array(refId).optional(),
-    foods: z.array(refId).optional(),
-  })
-  .strict()
-  .refine(
-    (data) =>
-      !data.startDate || !data.endDate || data.endDate > data.startDate,
-    {
-      message: "endDate must be after startDate",
-      path: ["endDate"],
-    },
-  )
-  .refine(
-    (data) =>
-      // adults/children aren't necessarily changing in this update, so the
-      // headcount check only runs when both adults and travellerNames are
-      // submitted together (enough to actually validate against).
-      data.adults === undefined || data.travellerNames === undefined
-        ? true
-        : travellerNamesMatchHeadcount({
-            adults: data.adults,
-            children: data.children,
-            travellerNames: data.travellerNames,
-          }),
-    {
-      message: "travellerNames length must match adults + children",
-      path: ["travellerNames"],
-    },
-  );
-
 const getTripsQuerySchema = z
   .object({
     page: z.coerce.number().int().min(1).default(DEFAULT_TRIPS_PAGE),
@@ -169,4 +112,4 @@ const getTripsQuerySchema = z
   })
   .strict();
 
-export { createTripSchema, updateTripSchema, getTripsQuerySchema };
+export { createTripSchema, getTripsQuerySchema };

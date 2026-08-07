@@ -8,11 +8,7 @@ import {
   updateTripService,
   deleteTripService,
 } from "@src/services/tripService";
-import type {
-  CreateTripBody,
-  UpdateTripBody,
-  GetTripsQuery,
-} from "@src/types/tripType";
+import type { CreateTripBody, GetTripsQuery } from "@src/types/tripType";
 
 // FUNCTION
 const createTrip = catchAsync(
@@ -63,7 +59,7 @@ const getTripById = catchAsync(
 const updateTrip = catchAsync(
   async (req: Request, res: Response): Promise<void> => {
     const id = req.params.id as string;
-    const body = req.validatedBody as UpdateTripBody;
+    const body = req.validatedBody as CreateTripBody;
 
     const data = await updateTripService(id, body, req.user!);
 
